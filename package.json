@@ -1,0 +1,92 @@
+{
+  "name": "nestjs-json-rpc",
+  "version": "0.0.0",
+  "description": ".....",
+  "source": "src/main/ts/index.ts",
+  "main": "target/bundle/nestjs-json-rpc.js",
+  "module": "target/bundle/nestjs-json-rpc.mjs",
+  "unpkg": "target/bundle/nestjs-json-rpc.umd.js",
+  "types": "typings/index.d.ts",
+  "typescript": {
+    "definition": "typings/index.d.ts"
+  },
+  "files": [
+    "README.md",
+    "CHANGELOG.md",
+    "target",
+    "typings",
+    "flow-typed"
+  ],
+  "scripts": {
+    "jest": "jest -w 1 --config=jest.config.json",
+    "lint": "tslint -p tsconfig.test.json src/**/*.ts",
+    "lint:fix": "yarn lint --fix",
+    "test": "yarn lint && yarn jest",
+    "clean": "rimraf target typings",
+    "build": "yarn clean && yarn build:es5 && yarn build:es6 && yarn build:ts && yarn build:bundle && yarn libdef && yarn docs && yarn uglify",
+    "build:es5": "mkdir -p target/es5 && tsc -p tsconfig.es5.json",
+    "build:es6": "mkdir -p target/es6 && tsc -p tsconfig.es6.json",
+    "build:ts": "cp -r src/main/ts/ target/ts/",
+    "build:bundle": "microbundle build src/main/ts/index.ts -o target/bundle",
+    "dtsgen": "dts-generator --project ./ --out typings/index.d.ts --prefix nestjs-json-rpc/target/es5 --name nestjs-json-rpc --main nestjs-json-rpc/target/es5/index --moduleResolution node",
+    "flowgen": "flowgen typings/index.d.ts --output-file flow-typed/index.flow.js",
+    "libdef": "yarn dtsgen && yarn libdeffix && yarn flowgen",
+    "libdeffix": "node -r esm ./src/gen/js/libdef-fix.js --dts=./typings/index.d.ts",
+    "test:report": "yarn test && yarn push:report",
+    "push:report": "yarn coveralls:push",
+    "coveralls:push": "cat ./coverage/lcov.info | coveralls",
+    "docs": "typedoc --readme README.md --tsconfig tsconfig.json src/main --ignoreCompilerErrors || exit 0",
+    "uglify": "for f in $(find target -name '*.js'); do short=${f%.js}; terser -c -m -o $short.js -- $f; done",
+    "postupdate": "yarn && yarn build && yarn test"
+  },
+  "dependencies": {
+    "@qiwi/substrate": "^1.11.2",
+    "tslib": "^1.10.0"
+  },
+  "devDependencies": {
+    "@qiwi/semantic-release-gh-pages-plugin": "^1.10.6",
+    "@semantic-release/changelog": "^3.0.4",
+    "@semantic-release/git": "^7.0.16",
+    "@semantic-release/github": "^5.4.3",
+    "@semantic-release/npm": "^5.1.15",
+    "@types/bluebird": "^3.5.27",
+    "@types/jest": "^24.0.18",
+    "@types/jest-json-schema": "^1.2.1",
+    "bluebird": "^3.5.5",
+    "coveralls": "^3.0.6",
+    "dts-generator": "^3.0.0",
+    "eslint-plugin-typescript": "^0.14.0",
+    "esm": "^3.2.25",
+    "flowgen": "1.10.0",
+    "jest": "^24.9.0",
+    "lodash": "^4.17.15",
+    "microbundle": "^0.12.0-next.3",
+    "replace-in-file": "^4.1.3",
+    "rimraf": "^3.0.0",
+    "semantic-release": "^15.13.24",
+    "terser": "^4.3.1",
+    "ts-jest": "^24.1.0",
+    "tslint": "^5.20.0",
+    "tslint-config-qiwi": "^1.1.1",
+    "typedoc": "^0.15.0",
+    "typedoc-plugin-external-module-name": "^2.1.0",
+    "typescript": "^3.6.3",
+    "typescript-eslint-parser": "^22.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antongolub/nestjs-json-rpc.git"
+  },
+  "keywords": [
+    "weak",
+    "reference",
+    "weak array",
+    "weak reference array"
+  ],
+  "author": "Anton Golub <mailbox@antongolub.ru>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/antongolub/nestjs-json-rpc/issues"
+  },
+  "homepage": "https://github.com/antongolub/nestjs-json-rpc#readme"
+}
