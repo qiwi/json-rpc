@@ -7,8 +7,8 @@ import {NestApplication} from '@nestjs/core'
 import request from 'supertest'
 import {
   JsonRpcController,
-  JsonRpcId,
-  JsonRpcMethod
+  JsonRpcMethod,
+  RpcId
 } from '../../main/ts/decorators'
 
 describe('decorators', () => {
@@ -17,12 +17,12 @@ describe('decorators', () => {
     @JsonRpcController('/rpc')
     class CustomController {
       @JsonRpcMethod('test1')
-      bar(@JsonRpcId() id: string) {
+      bar(@RpcId() id: string) {
         return {foo: 'bar', id}
       }
 
       @JsonRpcMethod('test2')
-      qux(@JsonRpcId() id: string) {
+      qux(@RpcId() id: string) {
         return {foo: 'quxr', id}
       }
     }
@@ -48,79 +48,26 @@ describe('decorators', () => {
       expect(controller).toBeDefined()
     })
 
-/*    it('returns 200 on valid request', () => {
+    it('returns 200 on valid request', () => {
       return request(app.getHttpServer())
         .post('/rpc')
         .send({
           method: 'test2',
           id: '123'
         })
-        .expect(HttpStatus.CREATED)
+        .expect(HttpStatus.OK)
         .expect({foo: 'quxr', id: '123'});
-    })*/
+    })
 
-    it('returns 200 on valid request', (done) => {
-      let c = 6
-      const ready = () => {
-        c--
-        if (c === 0) {
-          done()
-        }
-      }
-
-      request(app.getHttpServer())
-        .post('/rpc')
-        .send({
-          method: 'test2',
-          id: '123'
-        })
-        .expect(HttpStatus.CREATED)
-        .expect({foo: 'quxr', id: '123'}, ready)
-
-      request(app.getHttpServer())
+    it('finds proper method', () => {
+      return request(app.getHttpServer())
         .post('/rpc')
         .send({
           method: 'test1',
           id: '123'
         })
-        .expect(HttpStatus.CREATED)
-        .expect({foo: 'bar', id: '123'}, ready);
-
-      request(app.getHttpServer())
-        .post('/rpc')
-        .send({
-          method: 'test2',
-          id: '123'
-        })
-        .expect(HttpStatus.CREATED)
-        .expect({foo: 'quxr', id: '123'}, ready)
-
-      request(app.getHttpServer())
-        .post('/rpc')
-        .send({
-          method: 'test1',
-          id: '123'
-        })
-        .expect(HttpStatus.CREATED)
-        .expect({foo: 'bar', id: '123'}, ready);
-
-      request(app.getHttpServer())
-        .post('/rpc')
-        .send({
-          method: 'test2',
-          id: '123'
-        })
-        .expect(HttpStatus.CREATED)
-        .expect({foo: 'quxr', id: '123'}, ready)
-
-      request(app.getHttpServer())
-        .post('/rpc')
-        .send({
-          method: 'test2',
-          id: '123'
-        })
-        .expect(HttpStatus.CREATED)
-        .expect({foo: 'quxr', id: '123'}, ready)
+        .expect(HttpStatus.OK)
+        .expect({foo: 'bar', id: '123'})
     })
   })
 })
