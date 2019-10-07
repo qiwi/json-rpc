@@ -2,12 +2,15 @@ import {
   ControllerOptions,
   Controller,
   Post,
-  Body,
+  Req,
+  Res,
   HttpCode,
   HttpStatus
 } from '@nestjs/common'
 
 import {get} from 'lodash'
+
+import {Request, Response} from 'express'
 
 const JSON_RPC_METADATA = '__rpc-metadata__';
 
@@ -21,35 +24,26 @@ type TRpcMeta = {
   [key: string]: TRpcMethodEntry
 }
 
-export function JsonRpcController(): ClassDecorator
+interface ClassType<InstanceType extends Function> extends Function {
+  new(...args: any[]): InstanceType
+  prototype: InstanceType
+}
 
-export function JsonRpcController(prefix: string): ClassDecorator;
+type Extender = <BaseClass extends ClassType<any>>(base: BaseClass) => BaseClass
 
-export function JsonRpcController(options: ControllerOptions): ClassDecorator;
 
-export function JsonRpcController(
-  prefixOrOptions?: string | ControllerOptions,
-): ClassDecorator {
+export function JsonRpcMiddleware(): ClassDecorator {
   return <TFunction extends Function>(target: TFunction) => {
 
-    interface ClassType<InstanceType extends TFunction> extends Function {
-      new(...args: any[]): InstanceType
-      prototype: InstanceType
-    }
-
-    const extend = <BaseClass extends ClassType<any>>(base: BaseClass) => {
-      @Controller(prefixOrOptions as any)
+    const extend: Extender = (base) => {
       class Extended extends base {
-        @Post('/')
-        @HttpCode(HttpStatus.OK)
-        rpc(@Body() body: any): any {
+        protected middleware({body}: Request, res: Response): any {
           const {args, handler} = (this.constructor as any).resolveHandler(body)
+          const result = handler
+            ? handler.apply(this, args)
+            : {}
 
-          if (!handler) {
-            return null
-          }
-
-          return handler.apply(this, args)
+          res.status(HttpStatus.OK).send(result)
 
         }
         static resolveHandler(body: any): {handler: Function, args: any[]} | {[key: string]: any} {
@@ -70,6 +64,35 @@ export function JsonRpcController(
             args,
             handler
           }
+        }
+      }
+
+      return Extended
+    }
+
+    return extend(target as any)
+  };
+}
+
+export function JsonRpcController(): ClassDecorator
+
+export function JsonRpcController(prefix: string): ClassDecorator;
+
+export function JsonRpcController(options: ControllerOptions): ClassDecorator;
+
+export function JsonRpcController(
+  prefixOrOptions?: string | ControllerOptions,
+): ClassDecorator {
+  return <TFunction extends Function>(target: TFunction) => {
+
+    const extend: Extender = (base) => {
+      @Controller(prefixOrOptions as any)
+      @JsonRpcMiddleware()
+      class Extended extends base {
+        @Post('/')
+        @HttpCode(HttpStatus.OK)
+        rpc(@Req() req: Request, @Res() res: Response): any {
+          return this.middleware(req, res)
         }
       }
 
