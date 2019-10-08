@@ -131,4 +131,3 @@ export const JsonRpcMethod = (method: string) => {
     Reflect.defineMetadata(JSON_RPC_METADATA, meta, target.constructor)
   }
 };
-
