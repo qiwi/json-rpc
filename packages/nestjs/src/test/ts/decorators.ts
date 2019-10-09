@@ -1,4 +1,4 @@
-import { Test, TestingModule } from '@nestjs/testing'
+import {Test, TestingModule} from '@nestjs/testing'
 import {
   HttpStatus,
   // ValidationPipe
@@ -8,7 +8,7 @@ import request from 'supertest'
 import {
   JsonRpcController,
   JsonRpcMethod,
-  RpcId
+  RpcId,
 } from '../../main/ts/decorators'
 
 describe('decorators', () => {
@@ -16,6 +16,7 @@ describe('decorators', () => {
 
     @JsonRpcController('/rpc')
     class CustomController {
+
       @JsonRpcMethod('test1')
       bar(@RpcId() id: string) {
         return {foo: 'bar', id}
@@ -25,21 +26,22 @@ describe('decorators', () => {
       qux(@RpcId() id: string) {
         return {foo: 'quxr', id}
       }
+
     }
 
     let module: TestingModule
     let controller: CustomController
     let app: NestApplication
 
-    beforeAll(async () => {
+    beforeAll(async() => {
       module = await Test.createTestingModule({
-        providers:[],
+        providers: [],
         controllers: [CustomController],
       }).compile()
-      app = module.createNestApplication();
+      app = module.createNestApplication()
       // app.useGlobalPipes(new ValidationPipe({ whitelist: true }))
 
-      await app.init();
+      await app.init()
 
       controller = module.get(CustomController)
     })
@@ -53,10 +55,10 @@ describe('decorators', () => {
         .post('/rpc')
         .send({
           method: 'test2',
-          id: '123'
+          id: '123',
         })
         .expect(HttpStatus.OK)
-        .expect({foo: 'quxr', id: '123'});
+        .expect({foo: 'quxr', id: '123'})
     })
 
     it('finds proper method', () => {
@@ -64,7 +66,7 @@ describe('decorators', () => {
         .post('/rpc')
         .send({
           method: 'test1',
-          id: '123'
+          id: '123',
         })
         .expect(HttpStatus.OK)
         .expect({foo: 'bar', id: '123'})

@@ -5,14 +5,14 @@ import {
   Req,
   Res,
   HttpCode,
-  HttpStatus
+  HttpStatus,
 } from '@nestjs/common'
 
 import {get} from 'lodash'
 
 import {Request, Response} from 'express'
 
-const JSON_RPC_METADATA = '__rpc-metadata__';
+const JSON_RPC_METADATA = '__rpc-metadata__'
 
 type TRpcMethodEntry = {
   key?: string,
@@ -31,12 +31,12 @@ interface ClassType<InstanceType extends Function> extends Function {
 
 type Extender = <BaseClass extends ClassType<any>>(base: BaseClass) => BaseClass
 
-
 export function JsonRpcMiddleware(): ClassDecorator {
   return <TFunction extends Function>(target: TFunction) => {
 
     const extend: Extender = (base) => {
       class Extended extends base {
+
         protected middleware({body}: Request, res: Response): any {
           const {args, handler} = (this.constructor as any).resolveHandler(body)
           const result = handler
@@ -62,23 +62,18 @@ export function JsonRpcMiddleware(): ClassDecorator {
 
           return {
             args,
-            handler
+            handler,
           }
         }
+
       }
 
       return Extended
     }
 
     return extend(target as any)
-  };
+  }
 }
-
-export function JsonRpcController(): ClassDecorator
-
-export function JsonRpcController(prefix: string): ClassDecorator;
-
-export function JsonRpcController(options: ControllerOptions): ClassDecorator;
 
 export function JsonRpcController(
   prefixOrOptions?: string | ControllerOptions,
@@ -89,18 +84,20 @@ export function JsonRpcController(
       @Controller(prefixOrOptions as any)
       @JsonRpcMiddleware()
       class Extended extends base {
+
         @Post('/')
         @HttpCode(HttpStatus.OK)
         rpc(@Req() req: Request, @Res() res: Response): any {
           return this.middleware(req, res)
         }
+
       }
 
       return Extended
     }
 
     return extend(target as any)
-  };
+  }
 }
 
 export const jsonRpcParams = (valuePath: string = '.') => (target: Object, propertyKey: string, index: number) => {
@@ -130,4 +127,4 @@ export const JsonRpcMethod = (method: string) => {
 
     Reflect.defineMetadata(JSON_RPC_METADATA, meta, target.constructor)
   }
-};
+}
