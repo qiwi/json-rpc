@@ -2,6 +2,10 @@ language: node_js
 node_js:
   - '12'
 
+before_install:
+  - sudo apt-get install moreutils
+  - npm install -g yarn
+
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
@@ -13,14 +17,15 @@ after_script:
 
 install:
   - yarn cache clean
-  - yarn
+  - sh scripts/sh/install.sh
+  - yarn run bootstrap
+  - yarn run build
 
 script:
-  - yarn run build
   - yarn test:report
 
 deploy:
   provider: script
   skip_cleanup: true
   script:
-    - npx semantic-release
+    - yarn release
