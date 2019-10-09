@@ -26,7 +26,15 @@ export class SomeJsonRpcController {
     
     return 'ok'
   }
-} 
+}
+
+// App.ts
+@Module({
+  imports: [...],
+  controllers: [SomeJsonRpcController],
+  providers: [...],
+})
+export class AppModule {}
 ```
 
 With [Express](https://expressjs.com/):
