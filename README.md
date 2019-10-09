@@ -1,11 +1,8 @@
-# nestjs-json-rpc
-Nestjs JSON RPC 2.0 Controller
+# @qiwi/json-rpc
+Tools, utils and helpers for [JSON RPC 2.0](https://www.jsonrpc.org) integration.
 
-## Install
-```bash
-yarn add nestjs-json-rpc
-npm add nestjs-json-rpc
-```
+* [nestjs-json-rpc](./packages/nestjs/README.md)
+* [expressjs-json-rpc](./packages/expressjs/README.md)
 
 ## Usage
 With [Nestjs](https://nestjs.com/):
@@ -39,7 +36,7 @@ import {
   JsonRpcMethod,
   IJsonRpcId,
   IJsonRpcParams
-} from 'nestjs-json-rpc'
+} from 'expressjs-json-rpc'
 
 @JsonRpcMiddleware()
 export class SomeJsonRpcMware {
