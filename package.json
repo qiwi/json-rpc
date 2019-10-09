@@ -50,7 +50,10 @@
     "collectCoverage": true,
     "projects": [
       "<rootDir>/packages/nestjs/jest.config.json",
-      "<rootDir>/packages/expressjs/jest.config.json"
+      "<rootDir>/packages/expressjs/jest.config.json",
+      "<rootDir>/packages/facade/jest.config.json",
+      "<rootDir>/packages/common/jest.config.json",
+      "<rootDir>/packages/open-rpc/jest.config.json"
     ]
   }
 }

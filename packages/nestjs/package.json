@@ -28,7 +28,7 @@
     "build:es6": "mkdir -p target/es6 && tsc -p tsconfig.es6.json",
     "build:ts": "cp -r src/main/ts/ target/ts/",
     "build:bundle": "microbundle build src/main/ts/index.ts -o target/bundle",
-    "dtsgen": "dts-generator --project ./ --out typings/index.d.ts --prefix @pijma/core/target/es5 --name @pijma/core --main @pijma/core/target/es5/index --moduleResolution node",
+    "dtsgen": "dts-generator --project ./ --out typings/index.d.ts --prefix nestjs-json-rpc/target/es5 --name nestjs-json-rpc --main nestjs-json-rpc/target/es5/index --moduleResolution node",
     "flowgen": "flowgen typings/index.d.ts --output-file flow-typed/index.flow.js",
     "libdef": "yarn dtsgen && yarn libdeffix && yarn flowgen",
     "libdeffix": "node -r esm ../../scripts/js/libdef-fix.js --dts=./typings/index.d.ts",

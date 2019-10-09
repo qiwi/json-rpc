@@ -1,7 +1,7 @@
 {
-  "name": "expressjs-json-rpc",
+  "name": "@qiwi/json-rpc-common",
   "version": "0.0.0",
-  "description": "Express JSON RPC 2.0 Controller",
+  "description": "JSON RPC 2.0 common components",
   "main": "target/es5/index.js",
   "source": "target/ts/index.ts",
   "types": "typings/index.d.ts",
@@ -28,7 +28,7 @@
     "build:es6": "mkdir -p target/es6 && tsc -p tsconfig.es6.json",
     "build:ts": "cp -r src/main/ts/ target/ts/",
     "build:bundle": "microbundle build src/main/ts/index.ts -o target/bundle",
-    "dtsgen": "dts-generator --project ./ --out typings/index.d.ts --prefix expressjs-json-rpc/target/es5 --name expressjs-json-rpc --main expressjs-json-rpc/target/es5/index --moduleResolution node",
+    "dtsgen": "dts-generator --project ./ --out typings/index.d.ts --prefix @qiwi/json-rpc-common/target/es5 --name @qiwi/json-rpc-common --main @qiwi/json-rpc-common/target/es5/index --moduleResolution node",
     "flowgen": "flowgen typings/index.d.ts --output-file flow-typed/index.flow.js",
     "libdef": "yarn dtsgen && yarn libdeffix && yarn flowgen",
     "libdeffix": "node -r esm ../../scripts/js/libdef-fix.js --dts=./typings/index.d.ts",

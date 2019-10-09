@@ -1,0 +1,27 @@
+{
+  "transform": {
+    "^.+index\\.tsx?$": "ts-jest",
+    "^.+index\\.jsx?$": "@swissquote/crafty-preset-jest/src/esm-transformer"
+  },
+  "collectCoverage": true,
+  "coveragePathIgnorePatterns": [
+  ],
+  "collectCoverageFrom": [
+    "<rootDir>/src/main/**/*.(j|t)s"
+  ],
+  "testMatch": [
+    "<rootDir>/src/test/js/*.js",
+    "<rootDir>/src/test/ts/*.ts"
+  ],
+  "testPathIgnorePatterns": [
+    "/node_modules/"
+  ],
+  "moduleFileExtensions": [
+    "ts",
+    "tsx",
+    "js",
+    "jsx",
+    "json",
+    "node"
+  ]
+}
