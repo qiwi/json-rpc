@@ -19,6 +19,10 @@
     "esModuleInterop": true,
     "composite": true,
     "strictNullChecks": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+
+    "incremental": true,
+    "tsBuildInfoFile": "./buildcache/.tsbuildinfo"
+
   }
 }
