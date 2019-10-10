@@ -9,10 +9,22 @@ import {
   JsonRpcController,
   JsonRpcMethod,
   RpcId,
+  RpcParams,
 } from '../../main/ts/decorators'
 
 describe('decorators', () => {
   describe('JsonRpcController', () => {
+
+    class Abc {
+
+      a?: string
+      b?: number
+
+      constructor(raw: any) {
+        Object.assign(this, raw)
+      }
+
+    }
 
     @JsonRpcController('/rpc')
     class CustomController {
@@ -23,8 +35,8 @@ describe('decorators', () => {
       }
 
       @JsonRpcMethod('test2')
-      qux(@RpcId() id: string) {
-        return {foo: 'quxr', id}
+      qux(@RpcId() id: string, @RpcParams() {a, b}: Abc) {
+        return {foo: 'quxr', id, a, b}
       }
 
     }
@@ -56,9 +68,13 @@ describe('decorators', () => {
         .send({
           method: 'test2',
           id: '123',
+          params: {
+            a: 'a',
+            b: 2,
+          },
         })
         .expect(HttpStatus.OK)
-        .expect({foo: 'quxr', id: '123'})
+        .expect({foo: 'quxr', id: '123', a: 'a', b: 2})
     })
 
     it('finds proper method', () => {

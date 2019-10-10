@@ -17,7 +17,7 @@ const JSON_RPC_METADATA = '__rpc-metadata__'
 type TRpcMethodEntry = {
   key?: string,
   method?: string,
-  args?: string []
+  args?: Array<string | undefined>
 }
 
 type TRpcMeta = {
@@ -38,7 +38,7 @@ export function JsonRpcMiddleware(): ClassDecorator {
       class Extended extends base {
 
         protected middleware({body}: Request, res: Response): any {
-          const {args, handler} = (this.constructor as any).resolveHandler(body)
+          const {args, handler} = (this.constructor as any).resolveHandler(body, this)
           const result = handler
             ? handler.apply(this, args)
             : {}
@@ -46,7 +46,7 @@ export function JsonRpcMiddleware(): ClassDecorator {
           res.status(HttpStatus.OK).send(result)
 
         }
-        static resolveHandler(body: any): {handler: Function, args: any[]} | {[key: string]: any} {
+        static resolveHandler(body: any, instance: Extended): {handler: Function, args: any[]} | {[key: string]: any} {
           const _method = body.method
 
           const meta = Reflect.getMetadata(JSON_RPC_METADATA, this) || {}
@@ -57,8 +57,17 @@ export function JsonRpcMiddleware(): ClassDecorator {
             return {}
           }
 
-          const args = (methodMeta.args || []).map(path => get(body, path))
-          const handler = this.prototype[methodMeta.key + '']
+          const propKey = methodMeta.key + ''
+          const handler = this.prototype[propKey]
+          const paramTypes = Reflect.getMetadata('design:paramtypes', instance, propKey)
+          const args = (methodMeta.args || []).map((path, index) => {
+            const data = path ? get(body, path) : body
+            const DataConstructor = paramTypes[index]
+
+            return DataConstructor
+              ? new DataConstructor(data)
+              : data
+          })
 
           return {
             args,
@@ -100,7 +109,7 @@ export function JsonRpcController(
   }
 }
 
-export const jsonRpcParams = (valuePath: string = '.') => (target: Object, propertyKey: string, index: number) => {
+export const jsonRpcReq = (valuePath?: string) => (target: Object, propertyKey: string, index: number) => {
   const meta: TRpcMeta = Reflect.getOwnMetadata(JSON_RPC_METADATA, target.constructor) || {}
   const methodMeta: TRpcMethodEntry = meta[propertyKey] || {}
   const methodArgs = methodMeta.args || []
@@ -114,7 +123,9 @@ export const jsonRpcParams = (valuePath: string = '.') => (target: Object, prope
 
 }
 
-export const RpcId = () => jsonRpcParams('id')
+export const RpcId = () => jsonRpcReq('id')
+
+export const RpcParams = () => jsonRpcReq('params')
 
 export const JsonRpcMethod = (method: string) => {
   return (target: any, propertyKey: string) => {
