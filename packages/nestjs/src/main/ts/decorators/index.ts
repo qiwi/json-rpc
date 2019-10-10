@@ -12,7 +12,7 @@ import {get} from 'lodash'
 
 import {Request, Response} from 'express'
 
-const JSON_RPC_METADATA = '__rpc-metadata__'
+const JSON_RPC_METADATA = '__json-rpc-metadata__'
 
 type TRpcMethodEntry = {
   key?: string,

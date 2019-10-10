@@ -40,31 +40,22 @@
     "postupdate": "yarn && yarn build && yarn test"
   },
   "dependencies": {
-    "@nestjs/common": "^6.8.2",
-    "@nestjs/core": "^6.8.2",
     "@qiwi/substrate": "^1.11.2",
     "@types/express": "^4.17.1",
     "@types/lodash": "^4.14.141",
+    "lodash": "^4.17.15",
     "jsonrpc-lite": "^2.0.7",
-    "reflect-metadata": "^0.1.13",
-    "rxjs": "^6.5.3",
     "tslib": "^1.10.0"
   },
   "devDependencies": {
-    "@nestjs/platform-express": "^6.8.2",
-    "@nestjs/testing": "^6.8.2",
     "@qiwi/semantic-release-gh-pages-plugin": "^1.10.6",
     "@semantic-release/changelog": "^3.0.4",
     "@semantic-release/git": "^7.0.16",
     "@semantic-release/github": "^5.5.0",
     "@semantic-release/npm": "^5.2.0",
-    "@types/bluebird": "^3.5.27",
     "@types/jest": "^24.0.18",
     "@types/jest-json-schema": "^2.1.0",
     "@types/supertest": "^2.0.8",
-    "bluebird": "^3.7.0",
-    "class-transformer": "^0.2.3",
-    "class-validator": "^0.10.1",
     "coveralls": "^3.0.6",
     "dts-generator": "^3.0.0",
     "eslint-plugin-typescript": "^0.14.0",
@@ -92,10 +83,8 @@
     "url": "git+https://github.com/qiwi/json-rpc.git"
   },
   "keywords": [
-    "weak",
-    "reference",
-    "weak array",
-    "weak reference array"
+    "json rpc",
+    "json-rpc"
   ],
   "author": "Anton Golub <mailbox@antongolub.ru>",
   "license": "MIT",
