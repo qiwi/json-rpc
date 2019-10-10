@@ -12,24 +12,12 @@ import {get} from 'lodash'
 
 import {Request, Response} from 'express'
 
-const JSON_RPC_METADATA = '__json-rpc-metadata__'
-
-type TRpcMethodEntry = {
-  key?: string,
-  method?: string,
-  args?: Array<string | undefined>
-}
-
-type TRpcMeta = {
-  [key: string]: TRpcMethodEntry
-}
-
-interface ClassType<InstanceType extends Function> extends Function {
-  new(...args: any[]): InstanceType
-  prototype: InstanceType
-}
-
-type Extender = <BaseClass extends ClassType<any>>(base: BaseClass) => BaseClass
+import {
+  JSON_RPC_METADATA,
+  TRpcMethodEntry,
+  TRpcMeta,
+  Extender
+} from '@qiwi/json-rpc-common'
 
 export function JsonRpcMiddleware(): ClassDecorator {
   return <TFunction extends Function>(target: TFunction) => {
