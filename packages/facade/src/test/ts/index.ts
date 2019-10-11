@@ -1,7 +1,8 @@
-import {foo} from '../../main/ts'
+import {JsonRpcController, JSON_RPC_METADATA} from '../../main/ts'
 
 describe('index', () => {
-  it('exports foo', () => {
-    expect(foo).toBe('bar')
+  it('re-exports json-rpc inners', () => {
+    expect(JsonRpcController).toEqual(expect.any(Function))
+    expect(JSON_RPC_METADATA).toEqual(expect.any(String))
   })
 })

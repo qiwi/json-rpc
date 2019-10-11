@@ -4,7 +4,9 @@
     "baseUrl": "./packages",
     "paths": {
       "expressjs-json-rpc": ["./packages/expressjs/src/main/ts"],
+      "expressjs-json-rpc/*": ["./packages/expressjs/src/main/ts/*"],
       "nestjs-json-rpc": ["./nestjs/src/main/ts"],
+      "nestjs-json-rpc/*": ["./nestjs/src/main/ts/*"],
       "@qiwi/json-rpc": ["./facade/src/main/ts"],
       "@qiwi/json-rpc-common": ["./packages/common/src/main/ts"],
       "@qiwi/json-rpc-open-rpc": ["./open-rpc/src/main/ts"]

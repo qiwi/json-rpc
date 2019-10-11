@@ -30,9 +30,9 @@ export {
   jsonRpcReq,
 }
 
-export function JsonRpcController(
+export const JsonRpcController = (
   prefixOrOptions?: string | ControllerOptions,
-): ClassDecorator {
+): ClassDecorator => {
   return <TFunction extends Function>(target: TFunction) => {
 
     const extend: Extender = (base) => {

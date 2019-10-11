@@ -1,10 +1,10 @@
-# expressjs-json-rpc
-Expressjs JSON RPC 2.0 Controller
+# @qiwi/json-rpc
+JSON RPC 2.0 Controller
 
 ## Install
 ```bash
-yarn add expressjs-json-rpc
-npm add expressjs-json-rpc
+yarn add @qiwi/json-rpc
+npm add @qiwi/json-rpc
 ```
 
 ## Usage
@@ -14,7 +14,7 @@ import {
   JsonRpcMethod,
   IJsonRpcId,
   IJsonRpcParams
-} from 'nestjs-json-rpc'
+} from '@qiwi/json-rpc'
 
 @JsonRpcMiddleware()
 export class SomeJsonRpcMware {

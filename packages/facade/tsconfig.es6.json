@@ -4,6 +4,11 @@
     "target": "es6",
     "outDir": "target/es6"
   },
+  "references": [
+    { "path": "../common/tsconfig.es6.json" },
+    { "path": "../expressjs/tsconfig.es6.json" },
+    { "path": "../nestjs/tsconfig.es6.json" }
+  ],
   "include": [
     "src/main/**/*"
   ],
