@@ -10,7 +10,7 @@ import {
   JsonRpcMethod,
   RpcId,
   RpcParams,
-} from '../../main/ts/decorators'
+} from '../../main/ts/'
 
 describe('decorators', () => {
   describe('JsonRpcController', () => {
