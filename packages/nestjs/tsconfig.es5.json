@@ -2,10 +2,12 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "target": "es5",
-    "outDir": "target/es5",
-    "rootDir": "./src/main/ts/",
-    "baseUrl": "./src/main/ts/"
+    "outDir": "target/es5"
   },
+  "references": [
+    { "path": "../common/tsconfig.es5.json" },
+    { "path": "../expressjs/tsconfig.es5.json" }
+  ],
   "include": [
     "src/main/**/*"
   ],
