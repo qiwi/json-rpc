@@ -94,10 +94,8 @@
     "url": "git+https://github.com/qiwi/json-rpc.git"
   },
   "keywords": [
-    "weak",
-    "reference",
-    "weak array",
-    "weak reference array"
+    "json rpc",
+    "json-rpc"
   ],
   "author": "Anton Golub <mailbox@antongolub.ru>",
   "license": "MIT",
