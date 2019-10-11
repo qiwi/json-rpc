@@ -7,7 +7,8 @@
   "private": true,
   "scripts": {
     "clean": "lerna clean --yes && lerna run clean",
-    "build": "yarn clean && lerna run build --stream --concurrency 1",
+    "prebuild": "tsc -b packages/facade/tsconfig.es5.json",
+    "build": "yarn clean && yarn prebuild && lerna run build --stream --concurrency 1",
     "bootstrap": "lerna bootstrap",
     "jest": "jest",
     "test:report": "yarn test && yarn codeclimate:push && yarn coveralls:push",

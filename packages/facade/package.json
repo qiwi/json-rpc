@@ -28,7 +28,7 @@
     "build:es6": "mkdir -p target/es6 && tsc -p tsconfig.es6.json",
     "build:ts": "cp -r src/main/ts/ target/ts/",
     "build:bundle": "microbundle build src/main/ts/index.ts -o target/bundle",
-    "dtsgen": "dts-generator --project ./ --out typings/index.d.ts --prefix @qiwi/json-rpc/target/es5 --name @qiwi/json-rpc --main @qiwi/json-rpc/target/es5/index --moduleResolution node",
+    "dtsgen": "dts-generator --project ./ --out typings/index.d.ts --prefix @qiwi/json-rpc/target/es5 --name @qiwi/json-rpc --main @qiwi/json-rpc/target/es5/index",
     "flowgen": "flowgen typings/index.d.ts --output-file flow-typed/index.flow.js",
     "libdef": "yarn dtsgen && yarn libdeffix && yarn flowgen",
     "libdeffix": "node -r esm ../../scripts/js/libdef-fix.js --dts=./typings/index.d.ts",
