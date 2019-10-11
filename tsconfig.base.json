@@ -17,13 +17,10 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "composite": true,
     "strictNullChecks": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-
-    "incremental": true,
-    "tsBuildInfoFile": "./buildcache/.tsbuildinfo"
-
+    "composite": true,
+    "incremental": true
   }
 }

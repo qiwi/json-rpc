@@ -8,7 +8,7 @@ import {
   JSON_RPC_METADATA,
   TRpcMethodEntry,
   TRpcMeta,
-  Extender
+  Extender,
 } from '@qiwi/json-rpc-common'
 
 export function JsonRpcMiddleware(): ClassDecorator {

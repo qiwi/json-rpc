@@ -2,7 +2,7 @@ import {
   JsonRpcMethod,
   JsonRpcMiddleware,
   RpcId,
-  RpcParams
+  RpcParams,
 } from '../../main/ts'
 
 import reqresnext from 'reqresnext'
@@ -22,6 +22,7 @@ describe('expressjs-json-rpc', () => {
 
     @JsonRpcMiddleware()
     class SomeJsonRpcController {
+
       middleware: any
       @JsonRpcMethod('test1')
       bar(@RpcId() id: string) {
@@ -32,6 +33,7 @@ describe('expressjs-json-rpc', () => {
       qux(@RpcId() id: string, @RpcParams() {a, b}: Abc) {
         return {foo: 'quxr', id, a, b}
       }
+
     }
 
     const controller = new SomeJsonRpcController()
@@ -46,7 +48,7 @@ describe('expressjs-json-rpc', () => {
             a: 'a',
             b: 2,
           },
-        }
+        },
       })
 
       mware(req, res)
@@ -64,7 +66,7 @@ describe('expressjs-json-rpc', () => {
             a: 'a',
             b: 2,
           },
-        }
+        },
       })
 
       mware(req, res)

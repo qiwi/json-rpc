@@ -9677,10 +9677,10 @@ replace-in-file@^4.1.3:
     glob "^7.1.4"
     yargs "^13.3.0"
 
-reqresnext@^1.5.5:
-  version "1.5.5"
-  resolved "https://registry.yarnpkg.com/reqresnext/-/reqresnext-1.5.5.tgz#2f353245620b106b2da8e2b3802b56262f8d7137"
-  integrity sha512-T8FkyWmDBELNji4+6LbNpCx3PuVfUMYBqoLOaW1Tu5nvx7yXaGZHBQYq7q7Ie5w6QJzNzW5MYPhBNOAoByOOVg==
+reqresnext@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/reqresnext/-/reqresnext-1.6.1.tgz#45f52318ea1ff95029582328a82b3396f3c24747"
+  integrity sha512-wu9Im8uG0uyAXp8C0U4rwmie6UL9b/QmYsbThEqQE0zv/XLfpsnWhI9T6ZdrS2hNsVRrzlwL7w+1uVT1sWXbbw==
   dependencies:
     express "^4.17.1"
     lodash "^4.17.15"

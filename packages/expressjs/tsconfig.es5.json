@@ -1,10 +1,18 @@
 {
-  "extends": "./tsconfig.json",
   "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "strict": true,
+    "composite": true,
+    "esModuleInterop": true,
+    "rootDir": "./src/main/ts/",
+    "baseUrl": "./src/main/ts/",
     "target": "es5",
     "outDir": "target/es5",
-    "rootDir": "./src/main/ts/",
-    "baseUrl": "./src/main/ts/"
+    "incremental": true,
+    "tsBuildInfoFile": "./buildcache/.tsbuildinfo"
   },
   "include": [
     "src/main/**/*"
