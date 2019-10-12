@@ -1,3 +1,5 @@
+export * from './protocol'
+
 export const JSON_RPC_METADATA: string = '__json-rpc-metadata__'
 
 export type TRpcMethodEntry = {

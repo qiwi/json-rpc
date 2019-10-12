@@ -8,7 +8,7 @@
   "scripts": {
     "clean": "lerna clean --yes && lerna run clean",
     "prebuild": "tsc -b packages/facade/tsconfig.es5.json",
-    "build": "yarn clean && yarn prebuild && lerna run build --stream --concurrency 1",
+    "build": "yarn clean && yarn prebuild && lerna run build --stream --concurrency 2",
     "bootstrap": "lerna bootstrap",
     "jest": "jest",
     "test:report": "yarn test && yarn codeclimate:push && yarn coveralls:push",
