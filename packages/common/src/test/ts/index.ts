@@ -1,4 +1,10 @@
-import {JSON_RPC_METADATA, parse, parseObject, JsonRpc} from '../../main/ts'
+import {
+  JSON_RPC_METADATA,
+  parse,
+  parseObject,
+  parseJsonRpcObject,
+  JsonRpc,
+} from '../../main/ts'
 
 describe('index', () => {
   it('exports JSON_RPC_METADATA const', () => {
@@ -12,7 +18,7 @@ describe('index', () => {
           jsonrpc: '2.0',
           id: 123,
           method: 'update',
-          params: {foo: 'bar'}
+          params: {foo: 'bar'},
         })
 
         expect(res).toEqual({
@@ -22,9 +28,9 @@ describe('index', () => {
             id: 123,
             method: 'update',
             params: {
-              foo: 'bar'
-            }
-          }
+              foo: 'bar',
+            },
+          },
         })
         expect((res as any).payload).toBeInstanceOf(JsonRpc)
       })
@@ -37,8 +43,8 @@ describe('index', () => {
           payload: {
             jsonrpc: JsonRpc.VERSION,
             id: 123,
-            method: 'update'
-          }
+            method: 'update',
+          },
         })
       })
 
@@ -50,8 +56,29 @@ describe('index', () => {
           payload: {
             jsonrpc: JsonRpc.VERSION,
             method: 'update',
-            params: []
-          }
+            params: [],
+          },
+        })
+      })
+    })
+
+    describe('parseJsonRpcObject', () => {
+      it('recognizes JSON input as json rpc', () => {
+        const reqs = [
+          '{"jsonrpc":"2.0","id":123,"method":"update","params":{}}',
+          '{"jsonrpc":"2.0","id":123,"error":123}',
+          '{"jsonrpc":"2.0","id":123,"error":{"code":123,"message":"test"}}',
+          '{"jsonrpc":"2.0","id":123,"error":{"code":"123","message":"test"}}',
+          '{"jsonrpc":"2.0","method":"update","params":null}',
+          // batch
+          JSON.stringify([
+            {'jsonrpc': '2.0', 'method': 'sum', 'params': [1, 2, 4], 'id': '1'},
+            {'jsonrpc': '2.0', 'method': 'notify_hello', 'params': [7]},
+          ]),
+        ]
+
+        reqs.forEach(req => {
+          expect(parse(req)).toEqual(parseJsonRpcObject(JSON.parse(req)))
         })
       })
     })
