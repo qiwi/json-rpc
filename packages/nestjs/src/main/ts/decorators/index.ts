@@ -10,25 +10,11 @@ import {
 
 import {Request, Response} from 'express'
 
-import {
-  Extender,
-} from '@qiwi/json-rpc-common'
+import {Extender} from '@qiwi/json-rpc-common'
 
-import {
-  JsonRpcMiddleware,
-  RpcId,
-  RpcParams,
-  JsonRpcMethod,
-  jsonRpcReq,
-} from 'expressjs-json-rpc'
+import {JsonRpcMiddleware} from 'expressjs-json-rpc'
 
-export {
-  JsonRpcMiddleware,
-  RpcId,
-  RpcParams,
-  JsonRpcMethod,
-  jsonRpcReq,
-}
+export * from 'expressjs-json-rpc'
 
 export const JsonRpcController = (
   prefixOrOptions?: string | ControllerOptions,

@@ -9,7 +9,7 @@ import {
   JsonRpcController,
   JsonRpcMethod,
   RpcId,
-  RpcParams,
+  JsonRpcParams,
 } from '../../main/ts/'
 
 describe('decorators', () => {
@@ -35,7 +35,7 @@ describe('decorators', () => {
       }
 
       @JsonRpcMethod('test2')
-      qux(@RpcId() id: string, @RpcParams() {a, b}: Abc) {
+      qux(@RpcId() id: string, @JsonRpcParams() {a, b}: Abc) {
         return {foo: 'quxr', id, a, b}
       }
 

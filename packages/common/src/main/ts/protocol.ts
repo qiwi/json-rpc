@@ -4,7 +4,8 @@ import {
   IParsedObjectNotification,
   IParsedObjectRequest,
   IParsedObjectError,
-  IParsedObjectInvalid
+  IParsedObjectInvalid,
+  // RpcStatusType as StatusType,
 } from 'jsonrpc-lite'
 
 export * from 'jsonrpc-lite'
@@ -13,4 +14,13 @@ export * from 'jsonrpc-lite'
 export const parseJsonRpcObject = (body: any) => parse(JSON.stringify(body))
 
 export type IParsedObject = IParsedObjectSuccess | IParsedObjectNotification |
-  IParsedObjectRequest | IParsedObjectError| IParsedObjectInvalid
+  IParsedObjectRequest | IParsedObjectError | IParsedObjectInvalid
+
+// https://github.com/kulshekhar/ts-jest/issues/281
+export const enum RpcStatusType {
+  request = 'request',
+  notification = 'notification',
+  success = 'success',
+  error = 'error',
+  invalid = 'invalid',
+}

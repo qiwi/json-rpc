@@ -2,7 +2,7 @@ import {
   JsonRpcMethod,
   JsonRpcMiddleware,
   RpcId,
-  RpcParams,
+  JsonRpcParams,
 } from '../../main/ts'
 
 import reqresnext from 'reqresnext'
@@ -30,7 +30,7 @@ describe('expressjs-json-rpc', () => {
       }
 
       @JsonRpcMethod('test2')
-      qux(@RpcId() id: string, @RpcParams() {a, b}: Abc) {
+      qux(@RpcId() id: string, @JsonRpcParams() {a, b}: Abc) {
         return {foo: 'quxr', id, a, b}
       }
 
@@ -42,6 +42,7 @@ describe('expressjs-json-rpc', () => {
     it('properly handles requrest', () => {
       const {req, res} = reqresnext({
         body: {
+          jsonrpc: '2.0',
           method: 'test2',
           id: '123',
           params: {
@@ -60,6 +61,7 @@ describe('expressjs-json-rpc', () => {
     it('finds proper method', () => {
       const {req, res} = reqresnext({
         body: {
+          jsonrpc: '2.0',
           method: 'test1',
           id: '123',
           params: {

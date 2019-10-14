@@ -2,10 +2,16 @@ export * from './protocol'
 
 export const JSON_RPC_METADATA: string = '__json-rpc-metadata__'
 
+export type TRpcMethodParam = {
+  index: number,
+  type: any,
+  value: any
+}
+
 export type TRpcMethodEntry = {
   key?: string,
   method?: string,
-  args?: Array<string | undefined>
+  params?: Array<TRpcMethodParam>
 }
 
 export type TRpcMeta = {
