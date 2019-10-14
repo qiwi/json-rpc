@@ -66,6 +66,7 @@ describe('decorators', () => {
       return request(app.getHttpServer())
         .post('/rpc')
         .send({
+          jsonrpc: '2.0',
           method: 'test2',
           id: '123',
           params: {
@@ -81,8 +82,10 @@ describe('decorators', () => {
       return request(app.getHttpServer())
         .post('/rpc')
         .send({
+          jsonrpc: '2.0',
           method: 'test1',
           id: '123',
+          params: null
         })
         .expect(HttpStatus.OK)
         .expect({foo: 'bar', id: '123'})

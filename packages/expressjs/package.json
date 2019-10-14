@@ -47,7 +47,7 @@
     "jsonrpc-lite": "^2.0.7",
     "reflect-metadata": "^0.1.13",
     "class-transformer": "^0.2.3",
-    "class-validator": "^0.10.1",
+    "class-validator": "^0.10.2",
     "rxjs": "^6.5.3",
     "tslib": "^1.10.0",
     "lodash": "^4.17.15"
@@ -58,7 +58,7 @@
     "@semantic-release/git": "^7.0.16",
     "@semantic-release/github": "^5.5.3",
     "@semantic-release/npm": "^5.2.0",
-    "@types/jest": "^24.0.18",
+    "@types/jest": "^24.0.19",
     "@types/jest-json-schema": "^2.1.0",
     "coveralls": "^3.0.7",
     "dts-generator": "^3.0.0",
