@@ -3,6 +3,7 @@ import {
   JsonRpcMiddleware,
   RpcId,
   JsonRpcParams,
+  JsonRpcError,
 } from '../../main/ts'
 
 import reqresnext from 'reqresnext'
@@ -34,6 +35,11 @@ describe('expressjs-json-rpc', () => {
         return {foo: 'quxr', id, a, b}
       }
 
+      @JsonRpcMethod('get-some-error')
+      getSomeError() {
+        return new JsonRpcError('Some error', -100000)
+      }
+
     }
 
     const controller = new SomeJsonRpcController()
@@ -55,7 +61,11 @@ describe('expressjs-json-rpc', () => {
       mware(req, res)
 
       expect(res.statusCode).toBe(200)
-      expect(res.body).toBe(JSON.stringify({foo: 'quxr', id: '123', a: 'a', b: 2}))
+      expect(res.body).toBe(JSON.stringify({
+        jsonrpc: '2.0',
+        id: '123',
+        result: {foo: 'quxr', id: '123', a: 'a', b: 2},
+      }))
     })
 
     it('finds proper method', () => {
@@ -74,7 +84,58 @@ describe('expressjs-json-rpc', () => {
       mware(req, res)
 
       expect(res.statusCode).toBe(200)
-      expect(res.body).toBe(JSON.stringify({foo: 'bar', id: '123'}))
+      expect(res.body).toBe(JSON.stringify({
+        jsonrpc: '2.0',
+        id: '123',
+        result: {foo: 'bar', id: '123'},
+      }))
+    })
+
+    it('returns error if method does not exist', () => {
+      const {req, res} = reqresnext({
+        body: {
+          jsonrpc: '2.0',
+          method: 'foobar',
+          id: '111',
+          params: {},
+        },
+      })
+
+      mware(req, res)
+
+      expect(res.statusCode).toBe(200)
+      expect(res.body).toBe(JSON.stringify({
+        jsonrpc: '2.0',
+        id: '111',
+        error: {
+          message: 'Method not found',
+          code: -32601,
+          data: 'foobar',
+        },
+      }))
+    })
+
+    it('returns error if method returns JsonRpcError', () => {
+      const {req, res} = reqresnext({
+        body: {
+          jsonrpc: '2.0',
+          method: 'get-some-error',
+          id: '111',
+          params: {},
+        },
+      })
+
+      mware(req, res)
+
+      expect(res.statusCode).toBe(200)
+      expect(res.body).toBe(JSON.stringify({
+        jsonrpc: '2.0',
+        id: '111',
+        error: {
+          message: 'Some error',
+          code: -100000,
+        },
+      }))
     })
   })
 })

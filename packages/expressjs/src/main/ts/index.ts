@@ -13,7 +13,12 @@ import {
   parseJsonRpcObject,
   IParsedObjectRequest,
   RequestObject,
+  error,
+  success,
+  JsonRpcError,
 } from '@qiwi/json-rpc-common'
+
+export * from '@qiwi/json-rpc-common'
 
 export const enum JsonRpcDecoratorType {
   REQUEST = 'request',
@@ -36,14 +41,36 @@ export function JsonRpcMiddleware(): ClassDecorator {
 
           if (jsonRpc.type === 'request') {
             const {params, handler} = (this.constructor as any).resolveHandler(this, jsonRpc)
-            const result = handler
-              ? handler.apply(this, params)
-              : {}
+            const {payload: {id, method}} = jsonRpc
 
-            res.status(200).send(result)
+            if (!handler) {
+              res.status(200).send(error(id, JsonRpcError.methodNotFound(method)))
+
+              return
+            }
+
+            const result = (this.constructor as any).handleResult(handler.apply(this, params))
+            const jsonRpcResponse = result instanceof JsonRpcError
+              ? error(id, result)
+              : success(id, result)
+
+            res.status(200).send(jsonRpcResponse)
           }
 
         }
+
+        static handleResult(result: any): any {
+          if (result instanceof JsonRpcError) {
+            return result
+          }
+
+          if (result instanceof Error) {
+            return new JsonRpcError(result.message || '', 0)
+          }
+
+          return result
+        }
+
         static resolveHandler(instance: Extended, jsonRpc: IParsedObjectRequest): {handler: Function, params: any[]} | {[key: string]: any} {
 
           const _method = jsonRpc.payload.method

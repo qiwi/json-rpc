@@ -75,7 +75,11 @@ describe('decorators', () => {
           },
         })
         .expect(HttpStatus.OK)
-        .expect({foo: 'quxr', id: '123', a: 'a', b: 2})
+        .expect({
+          jsonrpc: '2.0',
+          id: '123',
+          result: {foo: 'quxr', id: '123', a: 'a', b: 2},
+        })
     })
 
     it('finds proper method', () => {
@@ -85,10 +89,14 @@ describe('decorators', () => {
           jsonrpc: '2.0',
           method: 'test1',
           id: '123',
-          params: null
+          params: {},
         })
         .expect(HttpStatus.OK)
-        .expect({foo: 'bar', id: '123'})
+        .expect({
+          jsonrpc: '2.0',
+          id: '123',
+          result: {foo: 'bar', id: '123'},
+        })
     })
   })
 })
