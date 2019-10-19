@@ -125,14 +125,14 @@ export const JsonRpcData = (type: JsonRpcDecoratorType = JsonRpcDecoratorType.RE
   (target: Object, propertyKey: string, index: number) => {
     const meta: TRpcMeta = Reflect.getOwnMetadata(JSON_RPC_METADATA, target.constructor) || {}
     const methodMeta: TRpcMethodEntry = meta[propertyKey] || {}
-    const methodArgs = methodMeta.params || []
+    const methodParams = methodMeta.params || []
 
-    methodArgs[index] = {
+    methodParams[index] = {
       index,
       type,
       value,
     }
-    methodMeta.params = methodArgs
+    methodMeta.params = methodParams
     methodMeta.key = propertyKey
     meta[propertyKey] = methodMeta
 

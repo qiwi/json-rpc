@@ -5,7 +5,6 @@ import {
   IParsedObjectRequest,
   IParsedObjectError,
   IParsedObjectInvalid,
-  // RpcStatusType as StatusType,
 } from 'jsonrpc-lite'
 
 export * from 'jsonrpc-lite'
