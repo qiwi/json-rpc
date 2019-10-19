@@ -4,6 +4,9 @@ Tools, utils and helpers for [JSON RPC 2.0](https://www.jsonrpc.org) integration
 * [nestjs-json-rpc](./packages/nestjs/README.md)
 * [expressjs-json-rpc](./packages/expressjs/README.md)
 
+## Status
+🚧 Work in progress 🚧 / Experimental / Early preview / pre-alpha version / 0.0.0-draft
+
 ## Usage
 With [Nestjs](https://nestjs.com/):
 ```typescript
