@@ -1,9 +1,13 @@
+dist: xenial
 language: node_js
 node_js:
   - '12'
 
+cache:
+  directories:
+    - node_modules
+
 before_install:
-  - sudo apt-get install moreutils
   - npm install -g yarn
 
 before_script:
@@ -16,7 +20,6 @@ after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 install:
-  - yarn cache clean
   - sh scripts/sh/install.sh
   - yarn run bootstrap
   - yarn run build

@@ -40,8 +40,8 @@
     "postupdate": "yarn && yarn build && yarn test"
   },
   "dependencies": {
-    "expressjs-json-rpc": "^0.0.0",
-    "nestjs-json-rpc": "^0.0.0",
+    "expressjs-json-rpc": "^1.0.0",
+    "nestjs-json-rpc": "^1.0.0",
     "@qiwi/json-rpc-common": "^0.0.0",
     "tslib": "^1.10.0"
   },
