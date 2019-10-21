@@ -4,6 +4,7 @@ import {
   RpcId,
   JsonRpcParams,
   JsonRpcError,
+  OK,
 } from '../../main/ts'
 
 import reqresnext from 'reqresnext'
@@ -60,7 +61,7 @@ describe('expressjs-json-rpc', () => {
 
       mware(req, res)
 
-      expect(res.statusCode).toBe(200)
+      expect(res.statusCode).toBe(OK)
       expect(res.body).toBe(JSON.stringify({
         jsonrpc: '2.0',
         id: '123',
@@ -83,7 +84,7 @@ describe('expressjs-json-rpc', () => {
 
       mware(req, res)
 
-      expect(res.statusCode).toBe(200)
+      expect(res.statusCode).toBe(OK)
       expect(res.body).toBe(JSON.stringify({
         jsonrpc: '2.0',
         id: '123',
@@ -103,7 +104,7 @@ describe('expressjs-json-rpc', () => {
 
       mware(req, res)
 
-      expect(res.statusCode).toBe(200)
+      expect(res.statusCode).toBe(OK)
       expect(res.body).toBe(JSON.stringify({
         jsonrpc: '2.0',
         id: '111',
@@ -127,7 +128,7 @@ describe('expressjs-json-rpc', () => {
 
       mware(req, res)
 
-      expect(res.statusCode).toBe(200)
+      expect(res.statusCode).toBe(OK)
       expect(res.body).toBe(JSON.stringify({
         jsonrpc: '2.0',
         id: '111',

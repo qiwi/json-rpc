@@ -16,6 +16,7 @@ import {
   error,
   success,
   JsonRpcError,
+  OK,
 } from '@qiwi/json-rpc-common'
 
 export * from '@qiwi/json-rpc-common'
@@ -44,7 +45,7 @@ export function JsonRpcMiddleware(): ClassDecorator {
             const {payload: {id, method}} = jsonRpc
 
             if (!handler) {
-              res.status(200).send(error(id, JsonRpcError.methodNotFound(method)))
+              res.status(OK).send(error(id, JsonRpcError.methodNotFound(method)))
 
               return
             }
@@ -54,7 +55,7 @@ export function JsonRpcMiddleware(): ClassDecorator {
               ? error(id, result)
               : success(id, result)
 
-            res.status(200).send(jsonRpcResponse)
+            res.status(OK).send(jsonRpcResponse)
           }
 
         }
