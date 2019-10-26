@@ -21,7 +21,7 @@
     "release": "multi-semantic-release --execasync"
   },
   "resolutions": {
-    "multi-semantic-release/semantic-release": "15.13.28"
+    "multi-semantic-release/execa": "3.2.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^3.0.5",
