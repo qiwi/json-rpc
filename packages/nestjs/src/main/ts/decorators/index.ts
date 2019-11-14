@@ -14,8 +14,6 @@ import {Extender} from '@qiwi/json-rpc-common'
 
 import {JsonRpcMiddleware} from 'expressjs-json-rpc'
 
-export * from 'expressjs-json-rpc'
-
 export const JsonRpcController = (
   prefixOrOptions?: string | ControllerOptions,
 ): ClassDecorator => {
