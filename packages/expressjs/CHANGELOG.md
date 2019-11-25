@@ -1,3 +1,18 @@
+## expressjs-json-rpc [1.0.2](https://github.com/qiwi/json-rpc/compare/expressjs-json-rpc@1.0.1...expressjs-json-rpc@1.0.2) (2019-11-25)
+
+
+### Performance Improvements
+
+* **package:** up deps & repack ([b1134c3](https://github.com/qiwi/json-rpc/commit/b1134c3222a6d45927e542b0c29ee8524723c884))
+
+
+
+
+
+### Dependencies
+
+* **@qiwi/json-rpc-common:** upgraded to 1.0.1
+
 ## expressjs-json-rpc [1.0.1](https://github.com/qiwi/json-rpc/compare/expressjs-json-rpc@1.0.0...expressjs-json-rpc@1.0.1) (2019-11-04)
 
 
