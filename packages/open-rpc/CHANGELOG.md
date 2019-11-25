@@ -1,3 +1,10 @@
+## @qiwi/json-rpc-open-rpc [1.0.1](https://github.com/qiwi/json-rpc/compare/@qiwi/json-rpc-open-rpc@1.0.0...@qiwi/json-rpc-open-rpc@1.0.1) (2019-11-25)
+
+
+### Performance Improvements
+
+* **package:** up deps & repack ([b1134c3](https://github.com/qiwi/json-rpc/commit/b1134c3222a6d45927e542b0c29ee8524723c884))
+
 # @qiwi/json-rpc-open-rpc 1.0.0 (2019-11-04)
 
 
