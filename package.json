@@ -40,7 +40,7 @@
     "jest": "^25.1.0",
     "lerna": "^3.20.2",
     "lodash": "^4.17.15",
-    "@qiwi/multi-semantic-release": "^2.0.0",
+    "@qiwi/multi-semantic-release": "^2.0.1",
     "replace-in-file": "^5.0.2",
     "semantic-release": "17.0.2",
     "snazzy": "^8.0.0",
@@ -59,5 +59,13 @@
       "<rootDir>/packages/common/jest.config.json",
       "<rootDir>/packages/open-rpc/jest.config.json"
     ]
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qiwi/json-rpc.git"
+  },
+  "bugs": {
+    "url": "https://github.com/qiwi/json-rpc/issues"
+  },
+  "homepage": "https://github.com/qiwi/json-rpc#readme"
 }
