@@ -1,6 +1,6 @@
 {
   "name": "@qiwi/json-rpc-open-rpc",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "JSON RPC 2.0 open-rpc describe",
   "main": "target/es5/index.js",
   "source": "target/ts/index.ts",
