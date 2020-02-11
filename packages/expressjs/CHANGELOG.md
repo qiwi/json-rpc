@@ -1,3 +1,18 @@
+## expressjs-json-rpc [1.0.3](https://github.com/qiwi/json-rpc/compare/expressjs-json-rpc@1.0.2...expressjs-json-rpc@1.0.3) (2020-02-11)
+
+
+### Performance Improvements
+
+* **package:** up deps, tune up typedoc config ([e2afc66](https://github.com/qiwi/json-rpc/commit/e2afc66460997567f18902467c09161398deb7e1))
+
+
+
+
+
+### Dependencies
+
+* **@qiwi/json-rpc-common:** upgraded to 1.0.2
+
 ## expressjs-json-rpc [1.0.2](https://github.com/qiwi/json-rpc/compare/expressjs-json-rpc@1.0.1...expressjs-json-rpc@1.0.2) (2019-11-25)
 
 
