@@ -33,8 +33,8 @@ export function JsonRpcMiddleware(): ClassDecorator {
     const extend: Extender = (base) => {
       class Extended extends base {
 
-        protected middleware({body}: Request, res: Response): any {
-          const jsonRpc = parseJsonRpcObject(body)
+        protected middleware(req: Request, res: Response): any {
+          const jsonRpc = parseJsonRpcObject(req.body)
           if (Array.isArray(jsonRpc)) {
             // TODO
             return
@@ -42,6 +42,8 @@ export function JsonRpcMiddleware(): ClassDecorator {
 
           if (jsonRpc.type === 'request') {
             const {params, handler} = (this.constructor as any).resolveHandler(this, jsonRpc)
+            // @ts-ignore
+            jsonRpc._meta = (this.constructor as any).metaResolver(req)
             const {payload: {id, method}} = jsonRpc
 
             if (!handler) {
@@ -58,6 +60,10 @@ export function JsonRpcMiddleware(): ClassDecorator {
             res.status(OK).send(jsonRpcResponse)
           }
 
+        }
+
+        static metaResolver(_req: Request): any {
+          return {}
         }
 
         static handleResult(result: any): any {
