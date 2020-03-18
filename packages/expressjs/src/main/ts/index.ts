@@ -34,21 +34,19 @@ export function JsonRpcMiddleware(): ClassDecorator {
       class Extended extends base {
 
         protected middleware(req: Request, res: Response): any {
-          const jsonRpc = parseJsonRpcObject(req.body)
-          if (Array.isArray(jsonRpc)) {
+          const parsedJsonRpc = (this.constructor as any).parseJsonRpcObject(req)
+          if (!parsedJsonRpc) {
             // TODO
             return
           }
 
-          if (jsonRpc.type === 'request') {
-            const {params, handler} = (this.constructor as any).resolveHandler(this, jsonRpc)
-            // @ts-ignore
-            jsonRpc._meta = (this.constructor as any).metaResolver(req)
-            const {payload: {id, method}} = jsonRpc
+          if (parsedJsonRpc.type === 'request') {
+            const {payload: {id, method}} = parsedJsonRpc
+            const {params, handler} = (this.constructor as any).resolveHandler(this, parsedJsonRpc)
 
+            // @ts-ignore
             if (!handler) {
               res.status(OK).send(error(id, JsonRpcError.methodNotFound(method)))
-
               return
             }
 
@@ -62,8 +60,19 @@ export function JsonRpcMiddleware(): ClassDecorator {
 
         }
 
-        static metaResolver(_req: Request): any {
-          return {}
+        static parseJsonRpcObject(req: Request) {
+          const jsonRpc = parseJsonRpcObject(req.body)
+
+          if (Array.isArray(jsonRpc)) {
+            // TODO
+            return
+          }
+
+          return {
+            payload: jsonRpc.payload,
+            meta: {},
+            type: jsonRpc.type,
+          }
         }
 
         static handleResult(result: any): any {
@@ -78,9 +87,9 @@ export function JsonRpcMiddleware(): ClassDecorator {
           return result
         }
 
-        static resolveHandler(instance: Extended, jsonRpc: IParsedObjectRequest): {handler: Function, params: any[]} | {[key: string]: any} {
+        static resolveHandler(instance: Extended, parsedJsonRpc: IParsedObjectRequest & {meta: Record<string, any>}): {handler: Function, params: any[]} | {[key: string]: any} {
 
-          const _method = jsonRpc.payload.method
+          const _method = parsedJsonRpc.payload.method
 
           const meta = Reflect.getMetadata(JSON_RPC_METADATA, this) || {}
           const methodMeta: TRpcMethodEntry | undefined = (Object as any).values(meta)
@@ -94,7 +103,7 @@ export function JsonRpcMiddleware(): ClassDecorator {
           const handler = this.prototype[propKey]
           const paramTypes = Reflect.getMetadata('design:paramtypes', instance, propKey)
           const params = (methodMeta.params || []).map((param: TRpcMethodParam, index: number) => {
-            return this.resolveParam(jsonRpc.payload, paramTypes[index], param)
+            return this.resolveParam(parsedJsonRpc.payload, parsedJsonRpc.meta, paramTypes[index], param)
           })
 
           return {
@@ -103,7 +112,7 @@ export function JsonRpcMiddleware(): ClassDecorator {
           }
         }
 
-        static resolveParam(payload: RequestObject, Param: any, {type, value}: TRpcMethodParam) {
+        static resolveParam(payload: RequestObject, _meta: Record<string, any>, Param: any, {type, value}: TRpcMethodParam) {
           let data
 
           if (type === JsonRpcDecoratorType.ID) {
