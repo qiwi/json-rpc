@@ -11,8 +11,7 @@ import {
   TRpcMeta,
   Extender,
   parseJsonRpcObject,
-  IParsedObjectRequest,
-  RequestObject,
+  IParsedObject,
   error,
   success,
   JsonRpcError,
@@ -27,6 +26,8 @@ export const enum JsonRpcDecoratorType {
   PARAMS = 'params',
 }
 
+type ITransmittable<D extends IParsedObject = IParsedObject, M = Record<string, any>> = {data: D, meta: M}
+
 export function JsonRpcMiddleware(): ClassDecorator {
   return <TFunction extends Function>(target: TFunction) => {
 
@@ -34,15 +35,15 @@ export function JsonRpcMiddleware(): ClassDecorator {
       class Extended extends base {
 
         protected middleware(req: Request, res: Response): any {
-          const parsedJsonRpc = (this.constructor as any).parseJsonRpcObject(req)
-          if (!parsedJsonRpc) {
+          const transmittable = (this.constructor as any).parseRequest(req)
+          if (!transmittable) {
             // TODO
             return
           }
 
-          if (parsedJsonRpc.type === 'request') {
-            const {payload: {id, method}} = parsedJsonRpc
-            const {params, handler} = (this.constructor as any).resolveHandler(this, parsedJsonRpc)
+          if (transmittable.data.type === 'request') {
+            const {data: {payload: {id, method}}} = transmittable
+            const {params, handler} = (this.constructor as any).resolveHandler(this, transmittable)
 
             // @ts-ignore
             if (!handler) {
@@ -60,7 +61,7 @@ export function JsonRpcMiddleware(): ClassDecorator {
 
         }
 
-        static parseJsonRpcObject(req: Request) {
+        static parseRequest(req: Request): ITransmittable | undefined {
           const jsonRpc = parseJsonRpcObject(req.body)
 
           if (Array.isArray(jsonRpc)) {
@@ -69,9 +70,8 @@ export function JsonRpcMiddleware(): ClassDecorator {
           }
 
           return {
-            payload: jsonRpc.payload,
+            data: jsonRpc,
             meta: {},
-            type: jsonRpc.type,
           }
         }
 
@@ -87,9 +87,12 @@ export function JsonRpcMiddleware(): ClassDecorator {
           return result
         }
 
-        static resolveHandler(instance: Extended, parsedJsonRpc: IParsedObjectRequest & {meta: Record<string, any>}): {handler: Function, params: any[]} | {[key: string]: any} {
+        static resolveHandler(instance: Extended, transmittable: ITransmittable): {handler: Function, params: any[]} | {[key: string]: any} {
+          if (transmittable.data.type !== 'request') {
+            throw new Error('unexpected error')
+          }
 
-          const _method = parsedJsonRpc.payload.method
+          const _method = transmittable.data.payload.method
 
           const meta = Reflect.getMetadata(JSON_RPC_METADATA, this) || {}
           const methodMeta: TRpcMethodEntry | undefined = (Object as any).values(meta)
@@ -103,7 +106,7 @@ export function JsonRpcMiddleware(): ClassDecorator {
           const handler = this.prototype[propKey]
           const paramTypes = Reflect.getMetadata('design:paramtypes', instance, propKey)
           const params = (methodMeta.params || []).map((param: TRpcMethodParam, index: number) => {
-            return this.resolveParam(parsedJsonRpc.payload, parsedJsonRpc.meta, paramTypes[index], param)
+            return this.resolveParam(transmittable, paramTypes[index], param)
           })
 
           return {
@@ -112,15 +115,19 @@ export function JsonRpcMiddleware(): ClassDecorator {
           }
         }
 
-        static resolveParam(payload: RequestObject, _meta: Record<string, any>, Param: any, {type, value}: TRpcMethodParam) {
+        static resolveParam(transmittable: ITransmittable, Param: any, {type, value}: TRpcMethodParam) {
           let data
 
           if (type === JsonRpcDecoratorType.ID) {
-            data = payload.id
+            if (transmittable.data.type === 'request') {
+              data = transmittable.data.payload.id
+            }
           }
           else {
-            data = payload.params
-            data = value ? get(data, value) : data
+            if (transmittable.data.type === 'request') {
+              data = transmittable.data.payload.params
+              data = value ? get(data, value) : data
+            }
           }
 
           return typeof Param === 'function'
