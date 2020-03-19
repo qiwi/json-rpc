@@ -1,3 +1,10 @@
+# @qiwi/json-rpc-common [1.1.0](https://github.com/qiwi/json-rpc/compare/@qiwi/json-rpc-common@1.0.2...@qiwi/json-rpc-common@1.1.0) (2020-03-19)
+
+
+### Features
+
+* **expressjs:** add req metaResolver ([7fddc73](https://github.com/qiwi/json-rpc/commit/7fddc73d7dbc61509748cd0b0c4029ce7afd6936))
+
 ## @qiwi/json-rpc-common [1.0.2](https://github.com/qiwi/json-rpc/compare/@qiwi/json-rpc-common@1.0.1...@qiwi/json-rpc-common@1.0.2) (2020-02-11)
 
 
