@@ -7,7 +7,8 @@
       "nestjs-json-rpc": ["./nestjs/src/main/ts"],
       "@qiwi/json-rpc": ["./facade/src/main/ts"],
       "@qiwi/json-rpc-common": ["./common/src/main/ts"],
-      "@qiwi/json-rpc-open-rpc": ["./open-rpc/src/main/ts"]
+      "@qiwi/json-rpc-open-rpc": ["./open-rpc/src/main/ts"],
+      "@qiwi/p3-json-rpc": ["./p3/src/main/ts"]
     }
   }
 }
