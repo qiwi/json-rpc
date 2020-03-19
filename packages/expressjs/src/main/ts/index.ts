@@ -120,7 +120,7 @@ export function JsonRpcMiddleware(): ClassDecorator {
           }
         }
 
-        static resolveParam(boxedJsonRpc: IMetaTypedValue<IParsedObject>, Param: any, {type, value}: TRpcMethodParam) {
+        static resolveParam(boxedJsonRpc: IJsonRpcMetaTypedValue, Param: any, {type, value}: TRpcMethodParam) {
           let data
 
           if (type === JsonRpcDecoratorType.ID) {
