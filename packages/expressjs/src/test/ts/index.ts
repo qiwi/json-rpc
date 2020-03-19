@@ -46,7 +46,7 @@ describe('expressjs-json-rpc', () => {
     const controller = new SomeJsonRpcController()
     const mware = controller.middleware.bind(controller)
 
-    it('properly handles requrest', () => {
+    it('properly handles request', () => {
       const {req, res} = reqresnext({
         body: {
           jsonrpc: '2.0',
@@ -62,11 +62,13 @@ describe('expressjs-json-rpc', () => {
       mware(req, res)
 
       expect(res.statusCode).toBe(OK)
-      expect(res.body).toBe(JSON.stringify({
-        jsonrpc: '2.0',
-        id: '123',
-        result: {foo: 'quxr', id: '123', a: 'a', b: 2},
-      }))
+      expect(res.body).toBe(
+        JSON.stringify({
+          jsonrpc: '2.0',
+          id: '123',
+          result: {foo: 'quxr', id: '123', a: 'a', b: 2},
+        }),
+      )
     })
 
     it('finds proper method', () => {
@@ -85,11 +87,13 @@ describe('expressjs-json-rpc', () => {
       mware(req, res)
 
       expect(res.statusCode).toBe(OK)
-      expect(res.body).toBe(JSON.stringify({
-        jsonrpc: '2.0',
-        id: '123',
-        result: {foo: 'bar', id: '123'},
-      }))
+      expect(res.body).toBe(
+        JSON.stringify({
+          jsonrpc: '2.0',
+          id: '123',
+          result: {foo: 'bar', id: '123'},
+        }),
+      )
     })
 
     it('returns error if method does not exist', () => {
@@ -105,15 +109,17 @@ describe('expressjs-json-rpc', () => {
       mware(req, res)
 
       expect(res.statusCode).toBe(OK)
-      expect(res.body).toBe(JSON.stringify({
-        jsonrpc: '2.0',
-        id: '111',
-        error: {
-          message: 'Method not found',
-          code: -32601,
-          data: 'foobar',
-        },
-      }))
+      expect(res.body).toBe(
+        JSON.stringify({
+          jsonrpc: '2.0',
+          id: '111',
+          error: {
+            message: 'Method not found',
+            code: -32601,
+            data: 'foobar',
+          },
+        }),
+      )
     })
 
     it('returns error if method returns JsonRpcError', () => {
@@ -129,14 +135,100 @@ describe('expressjs-json-rpc', () => {
       mware(req, res)
 
       expect(res.statusCode).toBe(OK)
-      expect(res.body).toBe(JSON.stringify({
-        jsonrpc: '2.0',
-        id: '111',
-        error: {
-          message: 'Some error',
-          code: -100000,
-        },
-      }))
+      expect(res.body).toBe(
+        JSON.stringify({
+          jsonrpc: '2.0',
+          id: '111',
+          error: {
+            message: 'Some error',
+            code: -100000,
+          },
+        }),
+      )
+    })
+
+    describe('static', () => {
+      describe('parseRequest', () => {
+        it('parseRequest return IJsonRpcMetaTypedValue', () => {
+          // @ts-ignore
+          const res = SomeJsonRpcController.parseRequest({
+            headers: {},
+            body: {
+              id: 1,
+              jsonrpc: '2.0',
+              method: 'test',
+              params: {
+                fields: {},
+              },
+            },
+          })
+          expect(res).toMatchObject({
+            meta: {},
+            type: 'jsonRpc',
+            value: {
+              type: 'request',
+              payload: {
+                jsonrpc: '2.0',
+                id: 1,
+                method: 'test',
+                params: {
+                  fields: {},
+                },
+              },
+            },
+          })
+        })
+      })
+
+      describe('resolveHandler', () => {
+        it('work correctly', () => {
+          // @ts-ignore
+          const boxedRpc = SomeJsonRpcController.parseRequest({
+            headers: {},
+            body: {
+              id: 1,
+              jsonrpc: '2.0',
+              method: 'test2',
+              params: {
+                fields: {},
+              },
+            },
+          })
+          // @ts-ignore
+          expect(SomeJsonRpcController.resolveHandler(
+              new SomeJsonRpcController(),
+              boxedRpc,
+            ),
+          ).toMatchObject({
+            params: [{0: '1'}, {fields: {}}],
+          })
+        })
+      })
+
+      describe('resolveParam', () => {
+        it('work correctly', () => {
+          // @ts-ignore
+          const boxedRpc = SomeJsonRpcController.parseRequest({
+            headers: {},
+            body: {
+              id: 1,
+              jsonrpc: '2.0',
+              method: 'test2',
+              params: {
+                a: 10,
+                b: 'foo',
+              },
+            },
+          })
+          // @ts-ignore
+          expect(SomeJsonRpcController.resolveParam(boxedRpc, Abc, {
+            index: 1,
+            type: 'params',
+            value: undefined,
+          }),
+          ).toMatchObject({a: 10, b: 'foo'})
+        })
+      })
     })
   })
 })

@@ -11,14 +11,13 @@ import {
   TRpcMeta,
   Extender,
   parseJsonRpcObject,
-  IParsedObjectRequest,
-  RequestObject,
+  IParsedObject,
   error,
   success,
   JsonRpcError,
   OK,
 } from '@qiwi/json-rpc-common'
-
+import {IMetaTypedValue} from '@qiwi/substrate'
 export * from '@qiwi/json-rpc-common'
 
 export const enum JsonRpcDecoratorType {
@@ -27,26 +26,28 @@ export const enum JsonRpcDecoratorType {
   PARAMS = 'params',
 }
 
+type IJsonRpcMetaTypedValue = IMetaTypedValue<IParsedObject, 'jsonRpc', {}>
+
 export function JsonRpcMiddleware(): ClassDecorator {
   return <TFunction extends Function>(target: TFunction) => {
 
     const extend: Extender = (base) => {
       class Extended extends base {
 
-        protected middleware({body}: Request, res: Response): any {
-          const jsonRpc = parseJsonRpcObject(body)
-          if (Array.isArray(jsonRpc)) {
+        protected middleware(req: Request, res: Response): any {
+          const boxedJsonRpc = (this.constructor as any).parseRequest(req)
+          if (!boxedJsonRpc) {
             // TODO
             return
           }
 
-          if (jsonRpc.type === 'request') {
-            const {params, handler} = (this.constructor as any).resolveHandler(this, jsonRpc)
-            const {payload: {id, method}} = jsonRpc
+          if (boxedJsonRpc.value.type === 'request') {
+            const {value: {payload: {id, method}}} = boxedJsonRpc
+            const {params, handler} = (this.constructor as any).resolveHandler(this, boxedJsonRpc)
 
+            // @ts-ignore
             if (!handler) {
               res.status(OK).send(error(id, JsonRpcError.methodNotFound(method)))
-
               return
             }
 
@@ -58,6 +59,21 @@ export function JsonRpcMiddleware(): ClassDecorator {
             res.status(OK).send(jsonRpcResponse)
           }
 
+        }
+
+        static parseRequest(req: Request): IJsonRpcMetaTypedValue | undefined {
+          const jsonRpc = parseJsonRpcObject(req.body)
+
+          if (Array.isArray(jsonRpc)) {
+            // TODO
+            return
+          }
+
+          return {
+            meta: {},
+            value: jsonRpc,
+            type: 'jsonRpc',
+          }
         }
 
         static handleResult(result: any): any {
@@ -72,9 +88,16 @@ export function JsonRpcMiddleware(): ClassDecorator {
           return result
         }
 
-        static resolveHandler(instance: Extended, jsonRpc: IParsedObjectRequest): {handler: Function, params: any[]} | {[key: string]: any} {
+        static resolveHandler(instance: Extended, boxedJsonRpc: IJsonRpcMetaTypedValue): {handler: Function, params: any[]} | {[key: string]: any} {
+          if (Array.isArray(boxedJsonRpc.value)) {
+            throw new Error('unexpected error')
+          }
 
-          const _method = jsonRpc.payload.method
+          if (boxedJsonRpc.value.type !== 'request') {
+            throw new Error('unexpected error')
+          }
+
+          const _method = boxedJsonRpc.value.payload.method
 
           const meta = Reflect.getMetadata(JSON_RPC_METADATA, this) || {}
           const methodMeta: TRpcMethodEntry | undefined = (Object as any).values(meta)
@@ -88,7 +111,7 @@ export function JsonRpcMiddleware(): ClassDecorator {
           const handler = this.prototype[propKey]
           const paramTypes = Reflect.getMetadata('design:paramtypes', instance, propKey)
           const params = (methodMeta.params || []).map((param: TRpcMethodParam, index: number) => {
-            return this.resolveParam(jsonRpc.payload, paramTypes[index], param)
+            return this.resolveParam(boxedJsonRpc, paramTypes[index], param)
           })
 
           return {
@@ -97,15 +120,19 @@ export function JsonRpcMiddleware(): ClassDecorator {
           }
         }
 
-        static resolveParam(payload: RequestObject, Param: any, {type, value}: TRpcMethodParam) {
+        static resolveParam(boxedJsonRpc: IJsonRpcMetaTypedValue, Param: any, {type, value}: TRpcMethodParam) {
           let data
 
           if (type === JsonRpcDecoratorType.ID) {
-            data = payload.id
+            if (boxedJsonRpc.value.type === 'request') {
+              data = boxedJsonRpc.value.payload.id
+            }
           }
           else {
-            data = payload.params
-            data = value ? get(data, value) : data
+            if (boxedJsonRpc.value.type === 'request') {
+              data = boxedJsonRpc.value.payload.params
+              data = value ? get(data, value) : data
+            }
           }
 
           return typeof Param === 'function'
