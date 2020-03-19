@@ -2178,19 +2178,12 @@
     sync-request "^6.1.0"
     tslib "^1.10.0"
 
-"@qiwi/substrate-abstract@^1.17.25":
-  version "1.17.27"
-  resolved "https://registry.yarnpkg.com/@qiwi/substrate-abstract/-/substrate-abstract-1.17.27.tgz#3770df4c29cee4b643cbee7e26ab2c8bb494f49a"
-  integrity sha512-mRw4Nl1Hx4FJsKpnmtnPaEFcqr3eTqLm9apMFMV4U2C4QIq9tgIK3NE91r+ePAj9oKG056G4eeL8KtXN9I/Cvg==
+"@qiwi/substrate-abstract@^1.17.28":
+  version "1.17.29"
+  resolved "https://registry.yarnpkg.com/@qiwi/substrate-abstract/-/substrate-abstract-1.17.29.tgz#931a8d5289a40d721bcae6ef69479e494e5dcd01"
+  integrity sha512-w4K/tu2L2g01EDhaRkk7xeKVAabjV8e7PdKxwBWHdnZV7ZOEM9zWSJu0+6iARUJdQDUIQ+lUmjhohnPTULKBWA==
   dependencies:
-    "@qiwi/substrate-types" "^1.28.0"
-
-"@qiwi/substrate-abstract@^1.17.27":
-  version "1.17.28"
-  resolved "https://registry.yarnpkg.com/@qiwi/substrate-abstract/-/substrate-abstract-1.17.28.tgz#093f3e1f38b6999e17b09d2916388a5d6060d5d5"
-  integrity sha512-9eOsNJRJUKyG7Rp5HEoeqP+eVJ9WlLQzGAUnac55vrmvs6gaM0uh6ALE+JDZO7REaKbUy20SyEuKOvHZnEomfQ==
-  dependencies:
-    "@qiwi/substrate-types" "^1.29.0"
+    "@qiwi/substrate-types" "^1.30.0"
 
 "@qiwi/substrate-std@*":
   version "1.0.15"
@@ -2204,28 +2197,19 @@
   resolved "https://registry.yarnpkg.com/@qiwi/substrate-types/-/substrate-types-1.29.0.tgz#463b46480fbc6c63d31ab6eae6b21ebacda2130d"
   integrity sha512-h+MgXgHl96E2tlgD+k5JBhxiq7NvkcXUDduSAmb0DHUpwBZLYU39vGaXfCwCIeZgqhzqdBUPhWxVFSJKvLHPdA==
 
-"@qiwi/substrate-types@^1.29.0", "@qiwi/substrate-types@^1.30.0":
+"@qiwi/substrate-types@^1.30.0":
   version "1.30.0"
   resolved "https://registry.yarnpkg.com/@qiwi/substrate-types/-/substrate-types-1.30.0.tgz#2cc33e5dd74c34469cfd4be6b319cfc116902f02"
   integrity sha512-BaKbBF0ko1rR51Mk4S7X3++mabGF+JBpwYjCxW3RAayiySli/epv72LBT40akBKey43xLnwDHoNf5dQYc05UUw==
 
-"@qiwi/substrate@^1.18.14":
-  version "1.18.14"
-  resolved "https://registry.yarnpkg.com/@qiwi/substrate/-/substrate-1.18.14.tgz#f51c70eff50b173878f5efa5b51ab5d6e5d7ddb1"
-  integrity sha512-5/AfZaKGtgdNXx8qOLhNfmTgw9ofT5UuTXMsTu3dVPaqWw0edIQCd4YRpQxSDLTUw5tQHrBVmnG2S+EmBNCbng==
+"@qiwi/substrate@^1.18.16":
+  version "1.18.16"
+  resolved "https://registry.yarnpkg.com/@qiwi/substrate/-/substrate-1.18.16.tgz#2e28652346f9da88ac778800f152f6f1c36a4cb9"
+  integrity sha512-+RFmiORtAc33b5/AHXnfDxgj6zeTbSTtvj+pvuo4eXSvoTdeP4bQrSwMDF2Nw+003LZ78iWWXYq7VO1nmFx5+w==
   dependencies:
-    "@qiwi/substrate-abstract" "^1.17.25"
+    "@qiwi/substrate-abstract" "^1.17.28"
     "@qiwi/substrate-std" "*"
-    "@qiwi/substrate-types" "^1.28.0"
-
-"@qiwi/substrate@^1.18.15":
-  version "1.18.15"
-  resolved "https://registry.yarnpkg.com/@qiwi/substrate/-/substrate-1.18.15.tgz#b95b489a54b71c433dd4408e190a67d904fb558e"
-  integrity sha512-M4SiMpIGnrOgGgVix3qTT6ojGpt2OJ6cHUCmd7GEvVDbFsbj7czTNuT2B9Ryt1T5PUTM6Ao9qHXpwYdMN6ENSg==
-  dependencies:
-    "@qiwi/substrate-abstract" "^1.17.27"
-    "@qiwi/substrate-std" "*"
-    "@qiwi/substrate-types" "^1.29.0"
+    "@qiwi/substrate-types" "^1.30.0"
 
 "@rollup/plugin-alias@^3.0.0":
   version "3.0.1"

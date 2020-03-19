@@ -17,7 +17,7 @@ import {
   JsonRpcError,
   OK,
 } from '@qiwi/json-rpc-common'
-import {IMetaTypedValue} from '@qiwi/substrate-types'
+import {IMetaTypedValue} from '@qiwi/substrate'
 export * from '@qiwi/json-rpc-common'
 
 export const enum JsonRpcDecoratorType {

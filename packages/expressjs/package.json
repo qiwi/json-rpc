@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@qiwi/json-rpc-common": "^1.0.2",
-    "@qiwi/substrate": "^1.18.15",
+    "@qiwi/substrate": "^1.18.16",
     "@types/express": "^4.17.3",
     "@types/lodash": "^4.14.149",
     "class-transformer": "^0.2.3",
