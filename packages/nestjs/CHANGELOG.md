@@ -1,3 +1,19 @@
+# nestjs-json-rpc [1.1.0](https://github.com/qiwi/json-rpc/compare/nestjs-json-rpc@1.0.3...nestjs-json-rpc@1.1.0) (2020-03-19)
+
+
+### Features
+
+* **expressjs:** add req metaResolver ([7fddc73](https://github.com/qiwi/json-rpc/commit/7fddc73d7dbc61509748cd0b0c4029ce7afd6936))
+
+
+
+
+
+### Dependencies
+
+* **@qiwi/json-rpc-common:** upgraded to 1.1.0
+* **expressjs-json-rpc:** upgraded to 1.1.0
+
 ## nestjs-json-rpc [1.0.3](https://github.com/qiwi/json-rpc/compare/nestjs-json-rpc@1.0.2...nestjs-json-rpc@1.0.3) (2020-02-11)
 
 

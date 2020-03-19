@@ -1,6 +1,6 @@
 {
   "name": "nestjs-json-rpc",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Nestjs JSON RPC 2.0 Controller",
   "main": "target/es5/index.js",
   "source": "target/ts/index.ts",
