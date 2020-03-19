@@ -138,5 +138,60 @@ describe('expressjs-json-rpc', () => {
         },
       }))
     })
+
+    describe('static', () => {
+      describe('parseRequest', () => {
+        it('parseRequest return IJsonRpcMetaTypedValue', () => {
+          // @ts-ignore
+          const res = SomeJsonRpcController.parseRequest({
+            headers: {},
+            body: {
+              'id': 1,
+              'jsonrpc': '2.0',
+              'method': 'test',
+              'params': {
+                'fields': {},
+              },
+            },
+          })
+          expect(res).toMatchObject({
+            meta: {},
+            type: 'jsonRpc',
+            value: {
+              type: 'request',
+              payload: {
+                jsonrpc: '2.0',
+                id: 1,
+                method: 'test',
+                params: {
+                  'fields': {},
+                },
+              },
+            },
+          })
+        })
+      })
+
+      describe('resolveHandler', () => {
+        it('work correctly', () => {
+          // @ts-ignore
+          const boxedRpc = SomeJsonRpcController.parseRequest({
+            headers: {},
+            body: {
+              'id': 1,
+              'jsonrpc': '2.0',
+              'method': 'test2',
+              'params': {
+                'fields': {},
+              },
+            },
+          })
+          // @ts-ignore
+          expect(SomeJsonRpcController.resolveHandler(new SomeJsonRpcController(), boxedRpc)).toMatchObject({
+            params: [{0: '1'}, {fields: {}}],
+          })
+        })
+      })
+    })
   })
 })

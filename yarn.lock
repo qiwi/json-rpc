@@ -2204,7 +2204,7 @@
   resolved "https://registry.yarnpkg.com/@qiwi/substrate-types/-/substrate-types-1.29.0.tgz#463b46480fbc6c63d31ab6eae6b21ebacda2130d"
   integrity sha512-h+MgXgHl96E2tlgD+k5JBhxiq7NvkcXUDduSAmb0DHUpwBZLYU39vGaXfCwCIeZgqhzqdBUPhWxVFSJKvLHPdA==
 
-"@qiwi/substrate-types@^1.29.0":
+"@qiwi/substrate-types@^1.29.0", "@qiwi/substrate-types@^1.30.0":
   version "1.30.0"
   resolved "https://registry.yarnpkg.com/@qiwi/substrate-types/-/substrate-types-1.30.0.tgz#2cc33e5dd74c34469cfd4be6b319cfc116902f02"
   integrity sha512-BaKbBF0ko1rR51Mk4S7X3++mabGF+JBpwYjCxW3RAayiySli/epv72LBT40akBKey43xLnwDHoNf5dQYc05UUw==
