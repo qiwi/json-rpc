@@ -17,7 +17,7 @@ import {
   JsonRpcError,
   OK,
 } from '@qiwi/json-rpc-common'
-
+import {IMetaTypedValue} from '@qiwi/substrate'
 export * from '@qiwi/json-rpc-common'
 
 export const enum JsonRpcDecoratorType {
@@ -26,7 +26,7 @@ export const enum JsonRpcDecoratorType {
   PARAMS = 'params',
 }
 
-type ITransmittable<D extends IParsedObject = IParsedObject, M = Record<string, any>> = {data: D, meta: M}
+type IJsonRpcMetaTypedValue = IMetaTypedValue<IParsedObject, 'jsonRpc', {}>
 
 export function JsonRpcMiddleware(): ClassDecorator {
   return <TFunction extends Function>(target: TFunction) => {
@@ -41,8 +41,8 @@ export function JsonRpcMiddleware(): ClassDecorator {
             return
           }
 
-          if (transmittable.data.type === 'request') {
-            const {data: {payload: {id, method}}} = transmittable
+          if (transmittable.value.type === 'request') {
+            const {value: {payload: {id, method}}} = transmittable
             const {params, handler} = (this.constructor as any).resolveHandler(this, transmittable)
 
             // @ts-ignore
@@ -61,7 +61,7 @@ export function JsonRpcMiddleware(): ClassDecorator {
 
         }
 
-        static parseRequest(req: Request): ITransmittable | undefined {
+        static parseRequest(req: Request): IJsonRpcMetaTypedValue | undefined {
           const jsonRpc = parseJsonRpcObject(req.body)
 
           if (Array.isArray(jsonRpc)) {
@@ -70,8 +70,9 @@ export function JsonRpcMiddleware(): ClassDecorator {
           }
 
           return {
-            data: jsonRpc,
             meta: {},
+            value: jsonRpc,
+            type: 'jsonRpc',
           }
         }
 
@@ -87,12 +88,16 @@ export function JsonRpcMiddleware(): ClassDecorator {
           return result
         }
 
-        static resolveHandler(instance: Extended, transmittable: ITransmittable): {handler: Function, params: any[]} | {[key: string]: any} {
-          if (transmittable.data.type !== 'request') {
+        static resolveHandler(instance: Extended, transmittable: IJsonRpcMetaTypedValue): {handler: Function, params: any[]} | {[key: string]: any} {
+          if (Array.isArray(transmittable.value)) {
             throw new Error('unexpected error')
           }
 
-          const _method = transmittable.data.payload.method
+          if (transmittable.value.type !== 'request') {
+            throw new Error('unexpected error')
+          }
+
+          const _method = transmittable.value.payload.method
 
           const meta = Reflect.getMetadata(JSON_RPC_METADATA, this) || {}
           const methodMeta: TRpcMethodEntry | undefined = (Object as any).values(meta)
@@ -115,17 +120,17 @@ export function JsonRpcMiddleware(): ClassDecorator {
           }
         }
 
-        static resolveParam(transmittable: ITransmittable, Param: any, {type, value}: TRpcMethodParam) {
+        static resolveParam(transmittable: IMetaTypedValue<IParsedObject>, Param: any, {type, value}: TRpcMethodParam) {
           let data
 
           if (type === JsonRpcDecoratorType.ID) {
-            if (transmittable.data.type === 'request') {
-              data = transmittable.data.payload.id
+            if (transmittable.value.type === 'request') {
+              data = transmittable.value.payload.id
             }
           }
           else {
-            if (transmittable.data.type === 'request') {
-              data = transmittable.data.payload.params
+            if (transmittable.value.type === 'request') {
+              data = transmittable.value.payload.params
               data = value ? get(data, value) : data
             }
           }
