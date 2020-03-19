@@ -1,3 +1,15 @@
+## @qiwi/json-rpc [1.0.4](https://github.com/qiwi/json-rpc/compare/@qiwi/json-rpc@1.0.3...@qiwi/json-rpc@1.0.4) (2020-03-19)
+
+
+
+
+
+### Dependencies
+
+* **expressjs-json-rpc:** upgraded to 1.1.0
+* **nestjs-json-rpc:** upgraded to 1.1.0
+* **@qiwi/json-rpc-common:** upgraded to 1.1.0
+
 ## @qiwi/json-rpc [1.0.3](https://github.com/qiwi/json-rpc/compare/@qiwi/json-rpc@1.0.2...@qiwi/json-rpc@1.0.3) (2020-02-11)
 
 
