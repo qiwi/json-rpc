@@ -1,6 +1,7 @@
-import {SECURITY_LEVEL_METADATA, CLIENT_TYPE_METADATA} from '../classDecorators'
+import {P3_METADATA, TP3Meta} from '../classDecorators'
+// import { TRpcMethodEntry } from '@qiwi/json-rpc-common'
 export const enum ClientTypes {
-  SINUP = 'SINAP',
+  SINAP = 'SINAP',
   QD_PROCESSING = 'QD_PROCESSING',
   QW_PROCESSING = 'QW_PROCESSING',
   SCHEDULER = 'SCHEDULER',
@@ -14,12 +15,16 @@ export const enum SecurityLevel {
 
 export const SecurityLevelGuard = (level: number) => {
   return (target: any, _propertyKey: string) => {
-    Reflect.defineMetadata(SECURITY_LEVEL_METADATA, level, target.constructor)
+    const meta: TP3Meta = Reflect.getOwnMetadata(P3_METADATA, target.constructor) || {}
+    meta.level = level
+    Reflect.defineMetadata(P3_METADATA, meta, target.constructor)
   }
 }
 
-export const ClientTypeGuard = (client: string) => {
+export const ClientTypeGuard = (clientType: string[] | string) => {
   return (target: any, _propertyKey: string) => {
-    Reflect.defineMetadata(CLIENT_TYPE_METADATA, client, target.constructor)
+    const meta: TP3Meta = Reflect.getOwnMetadata(P3_METADATA, target.constructor) || {}
+    meta.clientType = Array.isArray(clientType) ? clientType : [clientType]
+    Reflect.defineMetadata(P3_METADATA, meta, target.constructor)
   }
 }

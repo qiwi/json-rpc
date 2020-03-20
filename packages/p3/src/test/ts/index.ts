@@ -167,7 +167,7 @@ describe('P3', () => {
       @P3Provider('/p3')
       class CustomController {
 
-        @ClientTypeGuard(ClientTypes.SINUP)
+        @ClientTypeGuard(ClientTypes.SINAP)
         @SinapContext('test2')
         bar() {
           return {foo: 'bar'}
