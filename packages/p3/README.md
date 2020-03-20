@@ -10,25 +10,36 @@ npm add p3-json-rpc
 ## Usage
 ```typescript
 import {
-  JsonRpcController,
-  JsonRpcMethod,
-  IJsonRpcId,
-  IJsonRpcParams
-} from 'p3-json-rpc'
+  Auth,
+  Client,
+  ClientAuth,
+  P3Provider, Security, SecurityLevelGuard,
+  SinapContext,
+  SinapContextValue,
+  TClient, TSecurity,
+  TSinapContext,
+  ClientTypeGuard,
+} from '@qiwi/p3-json-rpc'
+import {RpcId} from 'expressjs-json-rpc'
 
-@JsonRpcController('/jsonrpc/endpoint')
-export class SomeJsonRpcController {
-  @JsonRpcMethod('some-method')
-  doSomething(@JsonRpcId() id: IJsonRpcId, @JsonRpcParams() params: IJsonRpcParams) {
-    const {foo} = params
-    
-    if (foo === 'bar') {
-      return new JsonRpcError(-100, '"foo" param should not be equal "bar"')
-    }
-    
-    return 'ok'
+@P3Provider('/p3-jsonrpc/endpoint')
+class CustomController {
+
+  @SecurityLevelGuard(7)
+  @ClientTypeGuard('client')
+  @SinapContext('method')
+  bar(
+    @RpcId() id: string,
+    @SinapContextValue() value: TSinapContext,
+    @Auth() auth: string,
+    @ClientAuth() clientAuth: string,
+    @Client() client: TClient,
+    @Security() security: TSecurity,
+  ) {
+    return {id, value, auth, clientAuth, client, security}
   }
-} 
+
+}
 ```
 
 ## Specification

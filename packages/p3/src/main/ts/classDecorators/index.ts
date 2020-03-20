@@ -3,15 +3,18 @@ import {ControllerOptions} from '@nestjs/common'
 import {
   Extender,
   TRpcMethodParam,
-  IParsedObject, JSON_RPC_METADATA, TRpcMethodEntry, parseJsonRpcObject,
+  IParsedObject, parseJsonRpcObject, JSON_RPC_METADATA, TRpcMethodEntry,
 } from '@qiwi/json-rpc-common'
 import {get} from 'lodash'
 import {JsonRpcController} from 'nestjs-json-rpc'
 import {Request} from 'express'
-
+import {SecurityLevel} from '../guards'
 import {IMetaTypedValue} from '@qiwi/substrate'
 
-export type TSinupMeta = {
+export const SECURITY_LEVEL_METADATA = '__securityLevel__'
+export const CLIENT_TYPE_METADATA = '__clientType__'
+
+export type TSinapMeta = {
   auth?: string
   clientAuth?: string | string[]
   client?: {
@@ -23,7 +26,7 @@ export type TSinupMeta = {
   }
 }
 
-type IP3MetaTypedValue = IMetaTypedValue<IParsedObject, 'jsonRpcP3', TSinupMeta>
+type IP3MetaTypedValue = IMetaTypedValue<IParsedObject, 'jsonRpcP3', TSinapMeta>
 
 export const P3Provider = (path: ControllerOptions | string): ClassDecorator => {
   return <TFunction extends Function> (target: TFunction) => {
@@ -43,7 +46,27 @@ export const P3Provider = (path: ControllerOptions | string): ClassDecorator => 
             data = boxedP3JsonRpc.value.payload.id
           }
 
-          if (type === 'sinapValue') {
+          if (type === 'sinapContext') {
+            data = {
+              // @ts-ignore
+              fields: boxedP3JsonRpc.value.payload.params?.fields,
+              // @ts-ignore
+              locale: boxedP3JsonRpc.value.payload.params?.locale,
+            }
+          }
+
+          if (type === 'sinapSuggest') {
+            data = {
+              // @ts-ignore
+              fields: boxedP3JsonRpc.value.payload.params?.fields,
+              // @ts-ignore
+              locale: boxedP3JsonRpc.value.payload.params?.locale,
+              // @ts-ignore
+              query: boxedP3JsonRpc.value.payload.params?.query,
+            }
+          }
+
+          if (type === 'sinapSuggest') {
             data = boxedP3JsonRpc.value.payload.params
             data = value ? get(data, value) : data
           }
@@ -91,6 +114,16 @@ export const P3Provider = (path: ControllerOptions | string): ClassDecorator => 
         static resolveHandler(instance: Extended, boxedJsonRpc: IP3MetaTypedValue): {handler: Function, params: any[]} | {[key: string]: any} {
           if (Array.isArray(boxedJsonRpc.value)) {
             throw new Error('unexpected error')
+          }
+          const level: number = Reflect.getMetadata(SECURITY_LEVEL_METADATA, this) ?? SecurityLevel.INSECURE
+          const clientType: string | undefined = Reflect.getMetadata(CLIENT_TYPE_METADATA, this)
+
+          if (level > (boxedJsonRpc.meta.security?.level ?? SecurityLevel.INSECURE)) {
+            return Error('Forbidden')
+          }
+
+          if (clientType !== undefined && clientType !== boxedJsonRpc.meta.client?.clientType) {
+            return Error('Forbidden')
           }
 
           if (boxedJsonRpc.value.type !== 'request') {
