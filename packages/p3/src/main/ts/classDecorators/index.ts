@@ -80,8 +80,8 @@ export const P3Provider = (path: ControllerOptions | string): ClassDecorator => 
             meta: {
               client: req.body.client,
               security: req.body.security,
-              auth: req.headers.authorization,
-              clientAuth: req.headers['client-authorization'],
+              auth: req.get('authorization'),
+              clientAuth: req.get('client-authorization'),
             },
             value: jsonRpc,
             type: 'jsonRpcP3',
