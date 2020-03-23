@@ -8,14 +8,13 @@ import {
   JSON_RPC_METADATA,
   TRpcMethodEntry,
 } from '@qiwi/json-rpc-common'
-import {get} from 'lodash'
 import {JsonRpcController} from 'nestjs-json-rpc'
 import {Request} from 'express'
 import {SecurityLevel} from '../guards'
 import {IMetaTypedValue} from '@qiwi/substrate'
 
 export type TP3Meta = {
-  level?: number
+  securityLevel?: number
   clientType?: Array<string>
 }
 export type TP3RpcMethodEntry = TRpcMethodEntry & { meta: TP3Meta }
@@ -42,56 +41,28 @@ export const P3Provider = (path: ControllerOptions | string): ClassDecorator => 
 
       class Extended extends JsonRpcBase {
 
-        static resolveParam(boxedP3JsonRpc: IP3MetaTypedValue, Param: any, {type, value}: TRpcMethodParam) {
-          let data
+        static resolveParam(boxedP3JsonRpc: IP3MetaTypedValue, Param: any, {type}: TRpcMethodParam) {
           if (boxedP3JsonRpc.value.type !== 'request') {
             return
           }
 
-          if (type === 'id') {
-            data = boxedP3JsonRpc.value.payload.id
+          const {value, meta} = boxedP3JsonRpc
+          const paramMap = {
+            // @ts-ignore
+            locale: value.payload.params?.locale,
+            // @ts-ignore
+            query: value.payload.params?.query,
+            // @ts-ignore
+            fields: value.payload.params?.fields,
+            id: value.payload.id,
+            client: meta.client,
+            security: meta.security,
+            auth: meta.auth,
+            clientAuth: meta.clientAuth,
           }
 
-          if (type === 'sinapContext') {
-            data = {
-              // @ts-ignore
-              fields: boxedP3JsonRpc.value.payload.params?.fields,
-              // @ts-ignore
-              locale: boxedP3JsonRpc.value.payload.params?.locale,
-            }
-          }
-
-          if (type === 'sinapSuggest') {
-            data = {
-              // @ts-ignore
-              fields: boxedP3JsonRpc.value.payload.params?.fields,
-              // @ts-ignore
-              locale: boxedP3JsonRpc.value.payload.params?.locale,
-              // @ts-ignore
-              query: boxedP3JsonRpc.value.payload.params?.query,
-            }
-          }
-
-          if (type === 'sinapSuggest') {
-            data = boxedP3JsonRpc.value.payload.params
-            data = value ? get(data, value) : data
-          }
-
-          if (type === 'client') {
-            data = boxedP3JsonRpc.meta.client
-          }
-
-          if (type === 'security') {
-            data = boxedP3JsonRpc.meta.security
-          }
-
-          if (type === 'auth') {
-            data = boxedP3JsonRpc.meta.auth
-          }
-
-          if (type === 'clientAuth') {
-            data = boxedP3JsonRpc.meta.clientAuth
-          }
+          // @ts-ignore
+          const data = paramMap[type]
 
           return typeof Param === 'function' ? new Param(data) : data
         }
@@ -135,7 +106,7 @@ export const P3Provider = (path: ControllerOptions | string): ClassDecorator => 
                 return
               }
 
-              if ((meta?.level ?? SecurityLevel.INSECURE) > (boxedJsonRpc.meta.security?.level ?? SecurityLevel.INSECURE)) {
+              if ((meta?.securityLevel ?? SecurityLevel.INSECURE) > (boxedJsonRpc.meta.security?.level ?? SecurityLevel.INSECURE)) {
                 return
               }
 

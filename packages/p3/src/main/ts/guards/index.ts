@@ -14,7 +14,7 @@ export const enum SecurityLevel {
   SECURE = 9,
 }
 
-export const SecurityLevelGuard = (level: number) => {
+export const SecurityLevelGuard = (securityLevel: number) => {
   return (
     target: any,
     propertyKey: string,
@@ -22,8 +22,8 @@ export const SecurityLevelGuard = (level: number) => {
     const meta = Reflect.getOwnMetadata(JSON_RPC_METADATA, target.constructor) || {}
     const methodMeta: TP3RpcMethodEntry = meta[propertyKey] || {}
     methodMeta.meta = {
-      ...meta[propertyKey].meta,
-      level,
+      ...methodMeta.meta,
+      securityLevel,
     }
     meta[propertyKey] = methodMeta
     Reflect.defineMetadata(JSON_RPC_METADATA, meta, target.constructor)
@@ -39,7 +39,7 @@ export const ClientTypeGuard = (clientType: string[] | string) => {
     const meta = Reflect.getOwnMetadata(JSON_RPC_METADATA, target.constructor) || {}
     const methodMeta: TP3RpcMethodEntry = meta[propertyKey] || {}
     methodMeta.meta = {
-      ...meta[propertyKey].meta,
+      ...methodMeta.meta,
       clientType: Array.isArray(clientType) ? clientType : [clientType],
     }
     meta[propertyKey] = methodMeta

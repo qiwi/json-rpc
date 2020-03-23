@@ -7,11 +7,16 @@ import {
   P3Provider,
   Auth,
   ClientAuth,
+  SinapSuggest,
   SinapContext,
   Client,
   Security,
-  SinapContextValue,
-  TSinapContext,
+  Fields,
+  Locale,
+  Query,
+  TFields,
+  TLocale,
+  TQuery,
   TClient,
   TSecurity,
   SecurityLevelGuard,
@@ -25,16 +30,18 @@ describe('P3', () => {
     @P3Provider('/p3')
     class CustomController {
 
-      @SinapContext('test2')
+      @SinapSuggest('test2')
       bar(
         @RpcId() id: string,
-        @SinapContextValue() value: TSinapContext,
+        @Fields() fields: TFields,
+        @Locale() locale: TLocale,
+        @Query() query: TQuery,
         @Auth() auth: string,
         @ClientAuth() clientAuth: string,
         @Client() client: TClient,
         @Security() security: TSecurity,
       ) {
-        return {foo: 'bar', id, value, auth, clientAuth, client, security}
+        return {foo: 'bar', id, fields, locale, query, auth, clientAuth, client, security}
       }
 
     }
@@ -61,11 +68,12 @@ describe('P3', () => {
         })
         .send({
           jsonrpc: '2.0',
-          method: 'context.test2',
+          method: 'suggest.test2',
           id: '123',
           params: {
             fields: {a: '123', foo: 'bar'},
             locale: 'baz',
+            query: 'qwe',
           },
           client: {
             clientId: 'SINAP-CLIENT',
@@ -82,10 +90,9 @@ describe('P3', () => {
           result: {
             foo: 'bar',
             id: '123',
-            value: {
-              fields: {a: '123', foo: 'bar'},
-              locale: 'baz',
-            },
+            fields: {a: '123', foo: 'bar'},
+            locale: 'baz',
+            query: 'qwe',
             auth: 'Authorization test2',
             clientAuth: 'Client-Authorization test3344',
             client: {clientId: 'SINAP-CLIENT', clientType: 'SINAP'},
