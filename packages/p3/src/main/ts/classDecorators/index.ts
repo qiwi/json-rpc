@@ -93,14 +93,7 @@ export const P3Provider = (path: ControllerOptions | string): ClassDecorator => 
         }
 
         static resolveHandler(instance: Extended, boxedJsonRpc: IP3MetaTypedValue): {handler: Function, params: any[]} | {[key: string]: any} {
-          if (Array.isArray(boxedJsonRpc.value)) {
-            throw new Error('unexpected error')
-          }
-
-          if (boxedJsonRpc.value.type !== 'request') {
-            throw new Error('unexpected error')
-          }
-
+          // @ts-ignore
           const _method = boxedJsonRpc.value.payload.method
 
           const meta = Reflect.getMetadata(JSON_RPC_METADATA, this) || {}
