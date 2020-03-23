@@ -140,7 +140,9 @@ describe('P3', () => {
             method: 'context.test2',
             id: '123',
             params: {},
-            client: {},
+            client: {
+              clientType: 'foo',
+            },
             security: {
               level: '3',
             },
@@ -161,7 +163,9 @@ describe('P3', () => {
             method: 'context.test2',
             id: '123',
             params: {},
-            client: {},
+            client: {
+              clientType: 'foo',
+            },
             security: {
               level: '9',
             },
@@ -182,7 +186,9 @@ describe('P3', () => {
             method: 'context.test1',
             id: '123',
             params: {},
-            client: {},
+            client: {
+              clientType: 'foo',
+            },
             security: {
               level: '7',
             },
@@ -232,7 +238,9 @@ describe('P3', () => {
             client: {
               clientType: 'baz',
             },
-            security: {},
+            security: {
+              level: '7',
+            },
           })
           .expect(HttpStatus.OK)
           .expect({
@@ -253,7 +261,9 @@ describe('P3', () => {
             client: {
               clientType: 'SINAP',
             },
-            security: {},
+            security: {
+              level: '7',
+            },
           })
           .expect(HttpStatus.OK)
           .expect({

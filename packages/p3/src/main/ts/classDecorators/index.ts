@@ -73,7 +73,11 @@ export const P3Provider = (path: ControllerOptions | string): ClassDecorator => 
 
           if (Array.isArray(jsonRpc)) {
             // TODO
-            return
+            throw new Error('unexpected error')
+          }
+
+          if (req.body.client.clientType === undefined || req.body.security.level === undefined) {
+            throw new Error('unexpected error')
           }
 
           return {
@@ -106,11 +110,11 @@ export const P3Provider = (path: ControllerOptions | string): ClassDecorator => 
                 return
               }
 
-              if ((meta?.securityLevel ?? SecurityLevel.INSECURE) > (boxedJsonRpc.meta.security?.level ?? SecurityLevel.INSECURE)) {
+              if ((meta?.securityLevel ?? SecurityLevel.INSECURE) > boxedJsonRpc.meta.security?.level!) {
                 return
               }
 
-              if (meta?.clientType !== undefined && !(boxedJsonRpc.meta.client?.clientType && meta?.clientType.includes(boxedJsonRpc.meta.client?.clientType))) {
+              if (meta?.clientType !== undefined && !(meta?.clientType.includes(boxedJsonRpc.meta.client?.clientType!))) {
                 return
               }
 
