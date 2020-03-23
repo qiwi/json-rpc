@@ -1,5 +1,6 @@
-import {P3_METADATA, TP3Meta} from '../classDecorators'
-// import { TRpcMethodEntry } from '@qiwi/json-rpc-common'
+import {TP3RpcMethodEntry} from '../classDecorators'
+import {JSON_RPC_METADATA} from '@qiwi/json-rpc-common'
+
 export const enum ClientTypes {
   SINAP = 'SINAP',
   QD_PROCESSING = 'QD_PROCESSING',
@@ -14,17 +15,34 @@ export const enum SecurityLevel {
 }
 
 export const SecurityLevelGuard = (level: number) => {
-  return (target: any, _propertyKey: string) => {
-    const meta: TP3Meta = Reflect.getOwnMetadata(P3_METADATA, target.constructor) || {}
-    meta.level = level
-    Reflect.defineMetadata(P3_METADATA, meta, target.constructor)
+  return (
+    target: any,
+    propertyKey: string,
+  ) => {
+    const meta = Reflect.getOwnMetadata(JSON_RPC_METADATA, target.constructor) || {}
+    const methodMeta: TP3RpcMethodEntry = meta[propertyKey] || {}
+    methodMeta.meta = {
+      ...meta[propertyKey].meta,
+      level,
+    }
+    meta[propertyKey] = methodMeta
+    Reflect.defineMetadata(JSON_RPC_METADATA, meta, target.constructor)
   }
 }
 
 export const ClientTypeGuard = (clientType: string[] | string) => {
-  return (target: any, _propertyKey: string) => {
-    const meta: TP3Meta = Reflect.getOwnMetadata(P3_METADATA, target.constructor) || {}
-    meta.clientType = Array.isArray(clientType) ? clientType : [clientType]
-    Reflect.defineMetadata(P3_METADATA, meta, target.constructor)
+  return (
+    target: any,
+    propertyKey: string,
+    _descriptor?: TypedPropertyDescriptor<any>,
+  ) => {
+    const meta = Reflect.getOwnMetadata(JSON_RPC_METADATA, target.constructor) || {}
+    const methodMeta: TP3RpcMethodEntry = meta[propertyKey] || {}
+    methodMeta.meta = {
+      ...meta[propertyKey].meta,
+      clientType: Array.isArray(clientType) ? clientType : [clientType],
+    }
+    meta[propertyKey] = methodMeta
+    Reflect.defineMetadata(JSON_RPC_METADATA, meta, target.constructor)
   }
 }

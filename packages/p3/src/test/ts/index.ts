@@ -105,6 +105,11 @@ describe('P3', () => {
           return {foo: 'bar'}
         }
 
+        @SinapContext('test1')
+        baz() {
+          return {foo: 'bar'}
+        }
+
       }
 
       let module: TestingModule
@@ -152,6 +157,27 @@ describe('P3', () => {
             client: {},
             security: {
               level: '9',
+            },
+          })
+          .expect(HttpStatus.OK)
+          .expect({
+            jsonrpc: '2.0',
+            id: '123',
+            result: {foo: 'bar'},
+          })
+      })
+
+      it('return data on method without guard', () => {
+        return request(app.getHttpServer())
+          .post('/p3')
+          .send({
+            jsonrpc: '2.0',
+            method: 'context.test1',
+            id: '123',
+            params: {},
+            client: {},
+            security: {
+              level: '7',
             },
           })
           .expect(HttpStatus.OK)

@@ -14,11 +14,11 @@ import {Request} from 'express'
 import {SecurityLevel} from '../guards'
 import {IMetaTypedValue} from '@qiwi/substrate'
 
-export const P3_METADATA = '__p3Metadata__'
 export type TP3Meta = {
   level?: number
   clientType?: Array<string>
 }
+export type TP3RpcMethodEntry = TRpcMethodEntry & { meta: TP3Meta }
 
 export type TSinapMeta = {
   auth?: string
@@ -122,19 +122,6 @@ export const P3Provider = (path: ControllerOptions | string): ClassDecorator => 
             throw new Error('unexpected error')
           }
 
-          const p3Meta: {
-            level: number
-            clientType: string | undefined
-          } = Reflect.getMetadata(P3_METADATA, this)
-
-          if ((p3Meta?.level ?? SecurityLevel.INSECURE) > (boxedJsonRpc.meta.security?.level ?? SecurityLevel.INSECURE)) {
-            return Error('Forbidden')
-          }
-
-          if (p3Meta?.clientType !== undefined && !(boxedJsonRpc.meta.client?.clientType && p3Meta?.clientType.includes(boxedJsonRpc.meta.client?.clientType))) {
-            return Error('Forbidden')
-          }
-
           if (boxedJsonRpc.value.type !== 'request') {
             throw new Error('unexpected error')
           }
@@ -142,8 +129,22 @@ export const P3Provider = (path: ControllerOptions | string): ClassDecorator => 
           const _method = boxedJsonRpc.value.payload.method
 
           const meta = Reflect.getMetadata(JSON_RPC_METADATA, this) || {}
-          const methodMeta: TRpcMethodEntry | undefined = (Object as any).values(meta)
-            .find(({method}: TRpcMethodEntry) => _method === method)
+          const methodMeta: TP3RpcMethodEntry | undefined = (Object as any).values(meta)
+            .find(({method, meta}: TP3RpcMethodEntry) => {
+              if (_method !== method) {
+                return
+              }
+
+              if ((meta?.level ?? SecurityLevel.INSECURE) > (boxedJsonRpc.meta.security?.level ?? SecurityLevel.INSECURE)) {
+                return
+              }
+
+              if (meta?.clientType !== undefined && !(boxedJsonRpc.meta.client?.clientType && meta?.clientType.includes(boxedJsonRpc.meta.client?.clientType))) {
+                return
+              }
+
+              return true
+            })
 
           if (!methodMeta) {
             return {}
