@@ -2,7 +2,7 @@ import 'reflect-metadata'
 
 import {get} from 'lodash'
 
-import {Request, Response} from 'express'
+import {Request, Response, NextFunction} from 'express'
 
 import {
   JSON_RPC_METADATA,
@@ -18,6 +18,8 @@ import {
   OK,
 } from '@qiwi/json-rpc-common'
 import {IMetaTypedValue} from '@qiwi/substrate'
+import {constructDecorator, METHOD} from '@qiwi/decorator-utils'
+
 export * from '@qiwi/json-rpc-common'
 
 export const enum JsonRpcDecoratorType {
@@ -25,6 +27,16 @@ export const enum JsonRpcDecoratorType {
   ID = 'id',
   PARAMS = 'params',
 }
+
+const asyncMiddleware = (fn: Function) => function(this: any, req: Request, res: Response, next: NextFunction) {
+  return Promise.resolve(fn.call(this, req, res, next)).catch(next)
+}
+
+const AsyncMiddleware = constructDecorator((targetType, target) => {
+  if (targetType === METHOD) {
+    return asyncMiddleware(target)
+  }
+})
 
 type IJsonRpcMetaTypedValue = IMetaTypedValue<IParsedObject, 'jsonRpc', {}>
 
@@ -34,6 +46,7 @@ export function JsonRpcMiddleware(): ClassDecorator {
     const extend: Extender = (base) => {
       class Extended extends base {
 
+        @AsyncMiddleware()
         protected middleware(req: Request, res: Response): any {
           const boxedJsonRpc = (this.constructor as any).parseRequest(req)
           if (!boxedJsonRpc) {

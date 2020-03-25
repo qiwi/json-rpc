@@ -46,7 +46,7 @@ describe('expressjs-json-rpc', () => {
     const controller = new SomeJsonRpcController()
     const mware = controller.middleware.bind(controller)
 
-    it('properly handles request', () => {
+    it('properly handles request', async() => {
       const {req, res} = reqresnext({
         body: {
           jsonrpc: '2.0',
@@ -59,7 +59,7 @@ describe('expressjs-json-rpc', () => {
         },
       })
 
-      mware(req, res)
+      await mware(req, res)
 
       expect(res.statusCode).toBe(OK)
       expect(res.body).toBe(
@@ -71,7 +71,7 @@ describe('expressjs-json-rpc', () => {
       )
     })
 
-    it('finds proper method', () => {
+    it('finds proper method', async() => {
       const {req, res} = reqresnext({
         body: {
           jsonrpc: '2.0',
@@ -84,7 +84,7 @@ describe('expressjs-json-rpc', () => {
         },
       })
 
-      mware(req, res)
+      await mware(req, res)
 
       expect(res.statusCode).toBe(OK)
       expect(res.body).toBe(
@@ -96,7 +96,7 @@ describe('expressjs-json-rpc', () => {
       )
     })
 
-    it('returns error if method does not exist', () => {
+    it('returns error if method does not exist', async() => {
       const {req, res} = reqresnext({
         body: {
           jsonrpc: '2.0',
@@ -106,7 +106,7 @@ describe('expressjs-json-rpc', () => {
         },
       })
 
-      mware(req, res)
+      await mware(req, res)
 
       expect(res.statusCode).toBe(OK)
       expect(res.body).toBe(
@@ -122,7 +122,7 @@ describe('expressjs-json-rpc', () => {
       )
     })
 
-    it('returns error if method returns JsonRpcError', () => {
+    it('returns error if method returns JsonRpcError', async() => {
       const {req, res} = reqresnext({
         body: {
           jsonrpc: '2.0',
@@ -132,7 +132,7 @@ describe('expressjs-json-rpc', () => {
         },
       })
 
-      mware(req, res)
+      await mware(req, res)
 
       expect(res.statusCode).toBe(OK)
       expect(res.body).toBe(
@@ -148,7 +148,7 @@ describe('expressjs-json-rpc', () => {
     })
 
     describe('static', () => {
-      describe('parseRequest', () => {
+      describe('#parseRequest', () => {
         it('parseRequest return IJsonRpcMetaTypedValue', () => {
           // @ts-ignore
           const res = SomeJsonRpcController.parseRequest({
@@ -180,7 +180,7 @@ describe('expressjs-json-rpc', () => {
         })
       })
 
-      describe('resolveHandler', () => {
+      describe('#resolveHandler', () => {
         it('work correctly', () => {
           // @ts-ignore
           const boxedRpc = SomeJsonRpcController.parseRequest({
@@ -205,7 +205,7 @@ describe('expressjs-json-rpc', () => {
         })
       })
 
-      describe('resolveParam', () => {
+      describe('#resolveParam', () => {
         it('work correctly', () => {
           // @ts-ignore
           const boxedRpc = SomeJsonRpcController.parseRequest({
