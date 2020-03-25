@@ -8983,6 +8983,23 @@ nerf-dart@^1.0.0:
   resolved "https://registry.yarnpkg.com/nerf-dart/-/nerf-dart-1.0.0.tgz#e6dab7febf5ad816ea81cf5c629c5a0ebde72c1a"
   integrity sha1-5tq3/r9a2Bbqgc9cYpxaDr3nLBo=
 
+nestjs-json-rpc@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/nestjs-json-rpc/-/nestjs-json-rpc-1.1.1.tgz#631242b86fc873e72ffe5e49160427951b5a4c31"
+  integrity sha512-VBO5xp79uXdjiqO+TWCwWUj/y1wlbiGzAAY9uSEssZBAx7Ga8vl+l7OBMBfZ5BShi7dSHIRw6mem0Kff4DqYqA==
+  dependencies:
+    "@nestjs/common" "^6.11.11"
+    "@nestjs/core" "^6.11.11"
+    "@qiwi/json-rpc-common" "^1.0.2"
+    "@qiwi/substrate" "^1.18.16"
+    "@types/express" "^4.17.3"
+    "@types/lodash" "^4.14.149"
+    expressjs-json-rpc "^1.0.3"
+    jsonrpc-lite "^2.1.0"
+    reflect-metadata "^0.1.13"
+    rxjs "^6.5.4"
+    tslib "^1.11.1"
+
 next-tick@1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.1.0.tgz#1836ee30ad56d67ef281b22bd199f709449b35eb"

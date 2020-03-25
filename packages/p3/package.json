@@ -49,7 +49,8 @@
     "jsonrpc-lite": "^2.1.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.4",
-    "tslib": "^1.11.1"
+    "tslib": "^1.11.1",
+    "nestjs-json-rpc": "^1.1.1"
   },
   "devDependencies": {
     "@nestjs/platform-express": "^6.11.11",
