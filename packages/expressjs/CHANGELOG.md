@@ -1,3 +1,10 @@
+# expressjs-json-rpc [1.2.0](https://github.com/qiwi/json-rpc/compare/expressjs-json-rpc@1.1.0...expressjs-json-rpc@1.2.0) (2020-03-25)
+
+
+### Features
+
+* **expressjs:** make mware be always async ([047ebb1](https://github.com/qiwi/json-rpc/commit/047ebb12daf0268c914df3ce4f3c9ae2f87a688e))
+
 # expressjs-json-rpc [1.1.0](https://github.com/qiwi/json-rpc/compare/expressjs-json-rpc@1.0.3...expressjs-json-rpc@1.1.0) (2020-03-19)
 
 
