@@ -27,7 +27,7 @@ describe('expressjs-json-rpc', () => {
 
       middleware: any
       @JsonRpcMethod('test1')
-      bar(@RpcId() id: string) {
+      async bar(@RpcId() id: string) {
         return {foo: 'bar', id}
       }
 
@@ -37,7 +37,7 @@ describe('expressjs-json-rpc', () => {
       }
 
       @JsonRpcMethod('get-some-error')
-      getSomeError() {
+      async getSomeError() {
         return new JsonRpcError('Some error', -100000)
       }
 

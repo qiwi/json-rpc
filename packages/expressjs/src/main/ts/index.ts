@@ -46,8 +46,8 @@ export function JsonRpcMiddleware(): ClassDecorator {
     const extend: Extender = (base) => {
       class Extended extends base {
 
-        @AsyncMiddleware()
-        protected middleware(req: Request, res: Response): any {
+        @AsyncMiddleware
+        protected async middleware(req: Request, res: Response): Promise<any> {
           const boxedJsonRpc = (this.constructor as any).parseRequest(req)
           if (!boxedJsonRpc) {
             // TODO
@@ -64,7 +64,7 @@ export function JsonRpcMiddleware(): ClassDecorator {
               return
             }
 
-            const result = (this.constructor as any).handleResult(handler.apply(this, params))
+            const result = (this.constructor as any).handleResult(await handler.apply(this, params))
             const jsonRpcResponse = result instanceof JsonRpcError
               ? error(id, result)
               : success(id, result)
