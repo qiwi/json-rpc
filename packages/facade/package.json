@@ -1,6 +1,6 @@
 {
   "name": "@qiwi/json-rpc",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "JSON RPC 2.0 facade",
   "main": "target/es5/index.js",
   "source": "target/ts/index.ts",

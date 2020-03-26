@@ -1,3 +1,18 @@
+## @qiwi/json-rpc [1.0.7](https://github.com/qiwi/json-rpc/compare/@qiwi/json-rpc@1.0.6...@qiwi/json-rpc@1.0.7) (2020-03-26)
+
+
+### Performance Improvements
+
+* **package:** up cross deps ([c61d42a](https://github.com/qiwi/json-rpc/commit/c61d42aeb6d76e53aed81ac11c91b9f0dfcc9daf))
+
+
+
+
+
+### Dependencies
+
+* **nestjs-json-rpc:** upgraded to 1.1.3
+
 ## @qiwi/json-rpc [1.0.6](https://github.com/qiwi/json-rpc/compare/@qiwi/json-rpc@1.0.5...@qiwi/json-rpc@1.0.6) (2020-03-26)
 
 
