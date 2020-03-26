@@ -1,3 +1,10 @@
+# expressjs-json-rpc [1.3.0](https://github.com/qiwi/json-rpc/compare/expressjs-json-rpc@1.2.0...expressjs-json-rpc@1.3.0) (2020-03-26)
+
+
+### Features
+
+* **expressjs:** add await for handler ([6fc00b9](https://github.com/qiwi/json-rpc/commit/6fc00b9d40cfcd84ec96ff983030f58a9e617603))
+
 # expressjs-json-rpc [1.2.0](https://github.com/qiwi/json-rpc/compare/expressjs-json-rpc@1.1.0...expressjs-json-rpc@1.2.0) (2020-03-25)
 
 
