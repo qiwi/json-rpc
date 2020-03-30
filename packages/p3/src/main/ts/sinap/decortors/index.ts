@@ -21,7 +21,7 @@ export const SinapSuggest = (arg?: any) => {
 
     if (targetType === PARAM) {
       // @ts-ignore
-      JsonRpcData(ParamMetadataKeys.PARAM)(proto, propName, paramIndex)
+      JsonRpcData(ParamMetadataKeys.PARAMS)(proto, propName, paramIndex)
     }
   })()
 }
@@ -34,7 +34,7 @@ export const SinapContext = (arg?: any) => {
 
     if (targetType === PARAM) {
       // @ts-ignore
-      JsonRpcData('params')(proto, propName, paramIndex)
+      JsonRpcData(ParamMetadataKeys.PARAMS)(proto, propName, paramIndex)
     }
   })()
 }

@@ -8,7 +8,7 @@ export const Auth = () => JsonRpcData('auth')
 // @ts-ignore
 export const ClientAuth = () => JsonRpcData('clientAuth')
 
-export const enum ClientTypes {
+export const enum ClientType {
   SINAP = 'SINAP',
   QD_PROCESSING = 'QD_PROCESSING',
   QW_PROCESSING = 'QW_PROCESSING',

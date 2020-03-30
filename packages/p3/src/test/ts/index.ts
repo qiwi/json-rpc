@@ -14,7 +14,7 @@ import {
   Security,
   TClient,
   TSecurity,
-  ClientTypes,
+  ClientType,
   SecurityLevel,
 } from '../../main/ts'
 
@@ -26,7 +26,7 @@ describe('P3', () => {
       @SinapSuggest('test2')
       bar(
         @RpcId() id: string,
-        @SinapContext() params: TSinapSuggest,
+        @SinapSuggest() params: TSinapSuggest,
         @Auth() auth: string,
         @ClientAuth() clientAuth: string,
         @Client() client: TClient,
@@ -203,7 +203,7 @@ describe('P3', () => {
       @P3Provider('/p3')
       class CustomController {
 
-        @Client(ClientTypes.SINAP)
+        @Client(ClientType.SINAP)
         @SinapContext('test2')
         bar() {
           return {foo: 'bar'}

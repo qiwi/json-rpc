@@ -27,7 +27,6 @@ export enum ParamMetadataKeys {
   ID = 'id',
   PARAMS = 'params',
   CLIENT = 'client',
-  PARAM = 'param',
   SECURITY = 'security',
 }
 
