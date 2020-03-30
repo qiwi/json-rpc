@@ -32,7 +32,7 @@ const asyncMiddleware = (fn: Function) => function(this: any, req: Request, res:
   return Promise.resolve(fn.call(this, req, res, next)).catch(next)
 }
 
-const AsyncMiddleware = constructDecorator((targetType, target) => {
+const AsyncMiddleware = constructDecorator(({targetType, target}) => {
   if (targetType === METHOD) {
     return asyncMiddleware(target)
   }
