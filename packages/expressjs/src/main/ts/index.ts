@@ -22,10 +22,13 @@ import {constructDecorator, METHOD} from '@qiwi/decorator-utils'
 
 export * from '@qiwi/json-rpc-common'
 
-export const enum JsonRpcDecoratorType {
+export enum ParamMetadataKeys {
   REQUEST = 'request',
   ID = 'id',
   PARAMS = 'params',
+  CLIENT = 'client',
+  PARAM = 'param',
+  SECURITY = 'security',
 }
 
 const asyncMiddleware = (fn: Function) => function(this: any, req: Request, res: Response, next: NextFunction) {
@@ -136,16 +139,16 @@ export function JsonRpcMiddleware(): ClassDecorator {
         static resolveParam(boxedJsonRpc: IJsonRpcMetaTypedValue, Param: any, {type, value}: TRpcMethodParam) {
           let data
 
-          if (type === JsonRpcDecoratorType.ID) {
-            if (boxedJsonRpc.value.type === 'request') {
-              data = boxedJsonRpc.value.payload.id
-            }
+          if (boxedJsonRpc.value.type !== 'request') {
+            return
+          }
+
+          if (type === ParamMetadataKeys.ID) {
+            data = boxedJsonRpc.value.payload.id
           }
           else {
-            if (boxedJsonRpc.value.type === 'request') {
-              data = boxedJsonRpc.value.payload.params
-              data = value ? get(data, value) : data
-            }
+            data = boxedJsonRpc.value.payload.params
+            data = value ? get(data, value) : data
           }
 
           return typeof Param === 'function'
@@ -162,7 +165,7 @@ export function JsonRpcMiddleware(): ClassDecorator {
   }
 }
 
-export const JsonRpcData = (type: JsonRpcDecoratorType = JsonRpcDecoratorType.REQUEST, value?: any) =>
+export const JsonRpcData = (type: ParamMetadataKeys = ParamMetadataKeys.REQUEST, value?: any) =>
   (target: Object, propertyKey: string, index: number) => {
     const meta: TRpcMeta = Reflect.getOwnMetadata(JSON_RPC_METADATA, target.constructor) || {}
     const methodMeta: TRpcMethodEntry = meta[propertyKey] || {}
@@ -181,11 +184,11 @@ export const JsonRpcData = (type: JsonRpcDecoratorType = JsonRpcDecoratorType.RE
 
   }
 
-export const RpcId = () => JsonRpcData(JsonRpcDecoratorType.ID)
+export const RpcId = () => JsonRpcData(ParamMetadataKeys.ID)
 
 export const JsonRpcId = RpcId
 
-export const JsonRpcParams = (value?: string) => JsonRpcData(JsonRpcDecoratorType.PARAMS, value)
+export const JsonRpcParams = (value?: string) => JsonRpcData(ParamMetadataKeys.PARAMS, value)
 
 export const JsonRpcMethod = (method: string) => {
   return (target: any, propertyKey: string) => {

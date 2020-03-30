@@ -1,6 +1,6 @@
 import {constructDecorator, METHOD, PARAM} from '@qiwi/decorator-utils'
 import {JsonRpcMethod} from 'nestjs-json-rpc'
-import {JsonRpcData} from 'expressjs-json-rpc'
+import {JsonRpcData, ParamMetadataKeys} from 'expressjs-json-rpc'
 
 export type TSinapSuggest = {
   query: string
@@ -21,7 +21,7 @@ export const SinapSuggest = (arg?: any) => {
 
     if (targetType === PARAM) {
       // @ts-ignore
-      JsonRpcData('params')(proto, propName, paramIndex)
+      JsonRpcData(ParamMetadataKeys.PARAM)(proto, propName, paramIndex)
     }
   })()
 }

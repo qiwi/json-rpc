@@ -1,5 +1,5 @@
 import {constructDecorator, METHOD, PARAM} from '@qiwi/decorator-utils'
-import {JsonRpcData} from 'expressjs-json-rpc'
+import {JsonRpcData, ParamMetadataKeys} from 'expressjs-json-rpc'
 import {JSON_RPC_METADATA} from '@qiwi/json-rpc-common'
 import {TP3RpcMethodEntry} from './class'
 
@@ -44,8 +44,7 @@ export const Client = (arg?: any) => {
     }
 
     if (targetType === PARAM) {
-      // @ts-ignore
-      JsonRpcData('client')(proto, propName, paramIndex)
+      JsonRpcData(ParamMetadataKeys.CLIENT)(proto, propName!, paramIndex!)
     }
   })()
 }
@@ -64,8 +63,7 @@ export const Security = (arg?: any) => {
     }
 
     if (targetType === PARAM) {
-      // @ts-ignore
-      JsonRpcData('security')(proto, propName, paramIndex)
+      JsonRpcData(ParamMetadataKeys.SECURITY)(proto, propName!, paramIndex!)
     }
   })()
 }
