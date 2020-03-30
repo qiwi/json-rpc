@@ -1,7 +1,7 @@
+import {get, set} from 'lodash'
 import {constructDecorator, METHOD, PARAM} from '@qiwi/decorator-utils'
 import {JsonRpcData, ParamMetadataKeys} from 'expressjs-json-rpc'
 import {JSON_RPC_METADATA} from '@qiwi/json-rpc-common'
-import {TP3RpcMethodEntry} from './class'
 
 // @ts-ignore
 export const Auth = () => JsonRpcData('auth')
@@ -32,17 +32,14 @@ export type TSecurity = {
 
 function injectMeta(path: string, value: unknown, propName: string, ctor: Function) {
   const meta = Reflect.getOwnMetadata(JSON_RPC_METADATA, ctor) || {}
-  const methodMeta: TP3RpcMethodEntry = meta[propName] || {}
-  methodMeta.meta = {
-    ...methodMeta.meta,
-    [path]: Array.isArray(value) ? value : [value],
-  }
-  meta[propName] = methodMeta
+  const fullpath = `${propName}.meta.${path}`
+  const prev = get(meta, fullpath)
+  set(meta, fullpath, Array.isArray(prev) ? prev.push(value) : value)
   Reflect.defineMetadata(JSON_RPC_METADATA, meta, ctor)
 }
 
 export const Client = (arg?: any) => {
-  return constructDecorator(({targetType, proto, propName, paramIndex,ctor}) => {
+  return constructDecorator(({targetType, proto, propName, paramIndex, ctor}) => {
     if (targetType === METHOD) {
       injectMeta('clientType', arg, propName!, ctor)
     }
