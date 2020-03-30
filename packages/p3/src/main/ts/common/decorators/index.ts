@@ -30,17 +30,21 @@ export type TSecurity = {
   security: { level: number }
 }
 
+function injectMeta(path: string, value: unknown, propName: string, ctor: Function) {
+  const meta = Reflect.getOwnMetadata(JSON_RPC_METADATA, ctor) || {}
+  const methodMeta: TP3RpcMethodEntry = meta[propName] || {}
+  methodMeta.meta = {
+    ...methodMeta.meta,
+    [path]: Array.isArray(value) ? value : [value],
+  }
+  meta[propName] = methodMeta
+  Reflect.defineMetadata(JSON_RPC_METADATA, meta, ctor)
+}
+
 export const Client = (arg?: any) => {
-  return constructDecorator(({targetType, proto, propName, paramIndex}) => {
+  return constructDecorator(({targetType, proto, propName, paramIndex,ctor}) => {
     if (targetType === METHOD) {
-      const meta = Reflect.getOwnMetadata(JSON_RPC_METADATA, proto.constructor) || {}
-      const methodMeta: TP3RpcMethodEntry = meta[propName!] || {}
-      methodMeta.meta = {
-        ...methodMeta.meta,
-        clientType: Array.isArray(arg) ? arg : [arg],
-      }
-      meta[propName!] = methodMeta
-      Reflect.defineMetadata(JSON_RPC_METADATA, meta, proto.constructor)
+      injectMeta('clientType', arg, propName!, ctor)
     }
 
     if (targetType === PARAM) {
@@ -50,16 +54,9 @@ export const Client = (arg?: any) => {
 }
 
 export const Security = (arg?: any) => {
-  return constructDecorator(({targetType, proto, propName, paramIndex}) => {
+  return constructDecorator(({targetType, proto, propName, paramIndex, ctor}) => {
     if (targetType === METHOD) {
-      const meta = Reflect.getOwnMetadata(JSON_RPC_METADATA, proto.constructor) || {}
-      const methodMeta: TP3RpcMethodEntry = meta[propName!] || {}
-      methodMeta.meta = {
-        ...methodMeta.meta,
-        securityLevel: arg,
-      }
-      meta[propName!] = methodMeta
-      Reflect.defineMetadata(JSON_RPC_METADATA, meta, proto.constructor)
+      injectMeta('securityLevel', arg, propName!, ctor)
     }
 
     if (targetType === PARAM) {
