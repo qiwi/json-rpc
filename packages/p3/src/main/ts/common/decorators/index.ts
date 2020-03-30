@@ -30,18 +30,17 @@ export type TSecurity = {
   security: { level: number }
 }
 
-function injectMeta(path: string, value: unknown, propName: string, ctor: Function) {
+function injectMeta(path: string, value: unknown, ctor: Function) {
   const meta = Reflect.getOwnMetadata(JSON_RPC_METADATA, ctor) || {}
-  const fullpath = `${propName}.meta.${path}`
-  const prev = get(meta, fullpath)
-  set(meta, fullpath, Array.isArray(prev) ? prev.push(value) : value)
+  const prev = get(meta, path)
+  set(meta, path, Array.isArray(prev) ? prev.push(value) : value)
   Reflect.defineMetadata(JSON_RPC_METADATA, meta, ctor)
 }
 
 export const Client = (arg?: any) => {
   return constructDecorator(({targetType, proto, propName, paramIndex, ctor}) => {
     if (targetType === METHOD) {
-      injectMeta('clientType', arg, propName!, ctor)
+      injectMeta(`${propName}.meta.clientType`, arg, ctor)
     }
 
     if (targetType === PARAM) {
@@ -53,7 +52,7 @@ export const Client = (arg?: any) => {
 export const Security = (arg?: any) => {
   return constructDecorator(({targetType, proto, propName, paramIndex, ctor}) => {
     if (targetType === METHOD) {
-      injectMeta('securityLevel', arg, propName!, ctor)
+      injectMeta(`${propName}.meta.securityLevel`, arg, ctor)
     }
 
     if (targetType === PARAM) {
