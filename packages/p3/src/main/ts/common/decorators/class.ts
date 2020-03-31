@@ -10,16 +10,17 @@ import {
 } from '@qiwi/json-rpc-common'
 import {JsonRpcController} from 'nestjs-json-rpc'
 import {Request} from 'express'
-import {SecurityLevel} from '../guards'
+import {SecurityLevel} from './'
 import {IMetaTypedValue} from '@qiwi/substrate'
 
 export type TP3Meta = {
   securityLevel?: number
   clientType?: Array<string>
 }
+
 export type TP3RpcMethodEntry = TRpcMethodEntry & { meta: TP3Meta }
 
-export type TSinapMeta = {
+export type TP3TypedMeta = {
   auth?: string
   clientAuth?: string | string[]
   client?: {
@@ -31,7 +32,7 @@ export type TSinapMeta = {
   }
 }
 
-type IP3MetaTypedValue = IMetaTypedValue<IParsedObject, 'jsonRpcP3', TSinapMeta>
+type IP3MetaTypedValue = IMetaTypedValue<IParsedObject, 'jsonRpcP3', TP3TypedMeta>
 
 export const P3Provider = (path: ControllerOptions | string): ClassDecorator => {
   return <TFunction extends Function> (target: TFunction) => {
@@ -48,12 +49,7 @@ export const P3Provider = (path: ControllerOptions | string): ClassDecorator => 
 
           const {value, meta} = boxedP3JsonRpc
           const paramMap = {
-            // @ts-ignore
-            locale: value.payload.params?.locale,
-            // @ts-ignore
-            query: value.payload.params?.query,
-            // @ts-ignore
-            fields: value.payload.params?.fields,
+            params: value.payload.params,
             id: value.payload.id,
             client: meta.client,
             security: meta.security,
@@ -97,7 +93,8 @@ export const P3Provider = (path: ControllerOptions | string): ClassDecorator => 
           const _method = boxedJsonRpc.value.payload.method
 
           const meta = Reflect.getMetadata(JSON_RPC_METADATA, this) || {}
-          const methodMeta: TP3RpcMethodEntry | undefined = (Object as any).values(meta)
+          const methodMeta: TP3RpcMethodEntry | undefined = (Object as any)
+            .values(meta)
             .find(({method, meta}: TP3RpcMethodEntry) => {
               if (_method !== method) {
                 return

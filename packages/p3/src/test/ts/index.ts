@@ -3,25 +3,19 @@ import {HttpStatus} from '@nestjs/common'
 import {NestApplication} from '@nestjs/core'
 import request from 'supertest'
 import {RpcId} from 'nestjs-json-rpc'
+// import {METHOD} from '@qiwi/decorator-utils'
 import {
   P3Provider,
   Auth,
   ClientAuth,
+  TSinapSuggest,
   SinapSuggest,
   SinapContext,
   Client,
   Security,
-  SinapFields,
-  SinapLocale,
-  SinapQuery,
-  TSinapFields,
-  TSinapLocale,
-  TSinapQuery,
   TClient,
   TSecurity,
-  SecurityLevelGuard,
-  ClientTypeGuard,
-  ClientTypes,
+  ClientType,
   SecurityLevel,
 } from '../../main/ts'
 
@@ -33,15 +27,21 @@ describe('P3', () => {
       @SinapSuggest('test2')
       bar(
         @RpcId() id: string,
-        @SinapFields() fields: TSinapFields,
-        @SinapLocale() locale: TSinapLocale,
-        @SinapQuery() query: TSinapQuery,
+        @SinapSuggest() params: TSinapSuggest,
         @Auth() auth: string,
         @ClientAuth() clientAuth: string,
         @Client() client: TClient,
         @Security() security: TSecurity,
       ) {
-        return {foo: 'bar', id, fields, locale, query, auth, clientAuth, client, security}
+        return {
+          foo: 'bar',
+          id,
+          params,
+          auth,
+          clientAuth,
+          client,
+          security,
+        }
       }
 
     }
@@ -90,9 +90,7 @@ describe('P3', () => {
           result: {
             foo: 'bar',
             id: '123',
-            fields: {a: '123', foo: 'bar'},
-            locale: 'baz',
-            query: 'qwe',
+            params: {fields: {a: '123', foo: 'bar'}, locale: 'baz', query: 'qwe'},
             auth: 'Authorization test2',
             clientAuth: 'Client-Authorization test3344',
             client: {clientId: 'SINAP-CLIENT', clientType: 'SINAP'},
@@ -106,7 +104,7 @@ describe('P3', () => {
       @P3Provider('/p3')
       class CustomController {
 
-        @SecurityLevelGuard(SecurityLevel.SECURE)
+        @Security(SecurityLevel.SECURE)
         @SinapContext('test2')
         bar() {
           return {foo: 'bar'}
@@ -121,14 +119,14 @@ describe('P3', () => {
 
       let module: TestingModule
       let app: NestApplication
-
+      // let controller: CustomController
       beforeAll(async() => {
         module = await Test.createTestingModule({
           providers: [],
           controllers: [CustomController],
         }).compile()
         app = module.createNestApplication()
-
+        // controller = module.get(CustomController)
         await app.init()
       })
 
@@ -200,13 +198,18 @@ describe('P3', () => {
             result: {foo: 'bar'},
           })
       })
+
+      it('throw error on empty guard', () => {
+        expect(() => Security()({constructor: 'constructor'}, 'method', {value: () => {/*noop*/}}))
+          .toThrow('Security level type must be specified')
+      })
     })
 
     describe('ClientTypeGuard', () => {
       @P3Provider('/p3')
       class CustomController {
 
-        @ClientTypeGuard(ClientTypes.SINAP)
+        @Client(ClientType.SINAP)
         @SinapContext('test2')
         bar() {
           return {foo: 'bar'}
@@ -271,6 +274,11 @@ describe('P3', () => {
             id: '123',
             result: {foo: 'bar'},
           })
+      })
+
+      it('throw error on empty guard', () => {
+        expect(() => Client()({constructor: 'constructor'}, 'method', {value: () => {/*noop*/}}))
+          .toThrow('Client type must be specified')
       })
     })
   })
