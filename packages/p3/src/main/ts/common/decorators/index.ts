@@ -34,7 +34,7 @@ export const Client = constructDecorator(({targetType, proto, propName, paramInd
     if (args.length === 0) {
       throw new Error('Client type must be specified')
     }
-    injectMeta(`${propName}.meta.clientType`, args, ctor, JSON_RPC_METADATA)
+    injectMeta(JSON_RPC_METADATA, `${propName}.meta.clientType`, args, ctor)
   }
 
   if (targetType === PARAM) {
@@ -47,7 +47,7 @@ export const Security = constructDecorator(({targetType, proto, propName, paramI
     if (args[0] === undefined) {
       throw new Error('Security level type must be specified')
     }
-    injectMeta(`${propName}.meta.securityLevel`, args[0], ctor, JSON_RPC_METADATA)
+    injectMeta(JSON_RPC_METADATA,`${propName}.meta.securityLevel`, args[0], ctor)
   }
 
   if (targetType === PARAM) {
