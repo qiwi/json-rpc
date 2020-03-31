@@ -37,9 +37,10 @@ function injectMeta(path: string, value: unknown, ctor: Function) {
   Reflect.defineMetadata(JSON_RPC_METADATA, meta, ctor)
 }
 
-export const Client = (...arg: any | any[]) => {
+export const Client = (...arg: any[]) => {
   return constructDecorator(({targetType, proto, propName, paramIndex, ctor}) => {
     if (targetType === METHOD) {
+      // tslint:disable-next-line
       if (arg === undefined) {
         throw new Error('Client type must be specified')
       }
@@ -56,7 +57,7 @@ export const Security = (arg?: any) => {
   return constructDecorator(({targetType, proto, propName, paramIndex, ctor}) => {
     if (targetType === METHOD) {
       if (arg === undefined) {
-        throw new Error('Client type must be specified')
+        throw new Error('Security level type must be specified')
       }
       injectMeta(`${propName}.meta.securityLevel`, arg, ctor)
     }
