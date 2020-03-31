@@ -1,3 +1,10 @@
+# expressjs-json-rpc [1.4.0](https://github.com/qiwi/json-rpc/compare/expressjs-json-rpc@1.3.0...expressjs-json-rpc@1.4.0) (2020-03-31)
+
+
+### Features
+
+* **p3:** introduce multi-purpose decorators ([224636d](https://github.com/qiwi/json-rpc/commit/224636d7f5bd23472d548704a99ec014b61aadd3))
+
 # expressjs-json-rpc [1.3.0](https://github.com/qiwi/json-rpc/compare/expressjs-json-rpc@1.2.0...expressjs-json-rpc@1.3.0) (2020-03-26)
 
 
