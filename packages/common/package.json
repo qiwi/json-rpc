@@ -45,7 +45,8 @@
     "@types/lodash": "^4.14.149",
     "lodash": "^4.17.15",
     "jsonrpc-lite": "^2.1.0",
-    "tslib": "^1.11.1"
+    "tslib": "^1.11.1",
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@qiwi/semantic-release-gh-pages-plugin": "^1.15.9",

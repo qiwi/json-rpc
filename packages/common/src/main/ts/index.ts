@@ -1,4 +1,5 @@
 export * from './protocol'
+export * from './injectMeta'
 
 export const JSON_RPC_METADATA: string = '__json-rpc-metadata__'
 
