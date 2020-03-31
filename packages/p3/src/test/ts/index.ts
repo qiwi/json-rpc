@@ -3,6 +3,7 @@ import {HttpStatus} from '@nestjs/common'
 import {NestApplication} from '@nestjs/core'
 import request from 'supertest'
 import {RpcId} from 'nestjs-json-rpc'
+// import {METHOD} from '@qiwi/decorator-utils'
 import {
   P3Provider,
   Auth,
@@ -118,14 +119,14 @@ describe('P3', () => {
 
       let module: TestingModule
       let app: NestApplication
-
+      // let controller: CustomController
       beforeAll(async() => {
         module = await Test.createTestingModule({
           providers: [],
           controllers: [CustomController],
         }).compile()
         app = module.createNestApplication()
-
+        // controller = module.get(CustomController)
         await app.init()
       })
 
@@ -196,6 +197,11 @@ describe('P3', () => {
             id: '123',
             result: {foo: 'bar'},
           })
+      })
+
+      it('throw error on empty guard', () => {
+        expect(() => Security()({constructor: 'constructor'}, 'method', {value: () => {/*noop*/}}))
+          .toThrow('Security level type must be specified')
       })
     })
 
@@ -268,6 +274,11 @@ describe('P3', () => {
             id: '123',
             result: {foo: 'bar'},
           })
+      })
+
+      it('throw error on empty guard', () => {
+        expect(() => Client()({constructor: 'constructor'}, 'method', {value: () => {/*noop*/}}))
+          .toThrow('Client type must be specified')
       })
     })
   })

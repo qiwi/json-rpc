@@ -30,40 +30,35 @@ export type TSecurity = {
   security: { level: number }
 }
 
-function injectMeta(path: string, value: unknown, ctor: Function) {
+export function injectMeta(path: string, value: unknown, ctor: Function) {
   const meta = Reflect.getOwnMetadata(JSON_RPC_METADATA, ctor) || {}
   const prev = get(meta, path)
   set(meta, path, Array.isArray(prev) ? prev.concat(value) : value)
   Reflect.defineMetadata(JSON_RPC_METADATA, meta, ctor)
 }
 
-export const Client = (...arg: any[]) => {
-  return constructDecorator(({targetType, proto, propName, paramIndex, ctor}) => {
-    if (targetType === METHOD) {
-      // tslint:disable-next-line
-      if (arg === undefined) {
-        throw new Error('Client type must be specified')
-      }
-      injectMeta(`${propName}.meta.clientType`, arg, ctor)
+export const Client = constructDecorator(({targetType, proto, propName, paramIndex, ctor, args}) => {
+  if (targetType === METHOD) {
+    if (args.length === 0) {
+      throw new Error('Client type must be specified')
     }
+    injectMeta(`${propName}.meta.clientType`, args, ctor)
+  }
 
-    if (targetType === PARAM) {
-      JsonRpcData(ParamMetadataKeys.CLIENT)(proto, propName!, paramIndex!)
-    }
-  })()
-}
+  if (targetType === PARAM) {
+    JsonRpcData(ParamMetadataKeys.CLIENT)(proto, propName!, paramIndex!)
+  }
+})
 
-export const Security = (arg?: any) => {
-  return constructDecorator(({targetType, proto, propName, paramIndex, ctor}) => {
-    if (targetType === METHOD) {
-      if (arg === undefined) {
-        throw new Error('Security level type must be specified')
-      }
-      injectMeta(`${propName}.meta.securityLevel`, arg, ctor)
+export const Security = constructDecorator(({targetType, proto, propName, paramIndex, ctor, args}) => {
+  if (targetType === METHOD) {
+    if (args[0] === undefined) {
+      throw new Error('Security level type must be specified')
     }
+    injectMeta(`${propName}.meta.securityLevel`, args[0], ctor)
+  }
 
-    if (targetType === PARAM) {
-      JsonRpcData(ParamMetadataKeys.SECURITY)(proto, propName!, paramIndex!)
-    }
-  })()
-}
+  if (targetType === PARAM) {
+    JsonRpcData(ParamMetadataKeys.SECURITY)(proto, propName!, paramIndex!)
+  }
+})
