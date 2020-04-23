@@ -8,7 +8,7 @@ import {
   P3Provider,
   Auth,
   ClientAuth,
-  TSinapSuggest,
+  SinapSuggestRequest,
   SinapSuggest,
   SinapContext,
   Client,
@@ -29,7 +29,7 @@ describe('P3', () => {
       @SinapSuggest('test2')
       bar(
         @RpcId() id: string,
-        @SinapSuggest() params: TSinapSuggest,
+        @SinapSuggest() params: SinapSuggestRequest,
         @Auth() auth: string,
         @ClientAuth() clientAuth: string,
         @Client() client: TClient,

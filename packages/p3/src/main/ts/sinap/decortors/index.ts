@@ -8,9 +8,35 @@ export type TSinapSuggest = {
   locale: string
 }
 
+export class SinapSuggestRequest {
+
+  query: string
+  fields?: Record<string, any>
+  locale: string
+
+  constructor(request: TSinapSuggest) {
+    this.fields = request.fields
+    this.locale = request.locale
+    this.query = request.query
+  }
+
+}
+
 export type TSinapContext = {
   fields?: Record<string, any>
   locale: string
+}
+
+export class SinapContextRequest {
+
+  fields?: Record<string, any>
+  locale: string
+
+  constructor(request: TSinapContext) {
+    this.fields = request.fields
+    this.locale = request.locale
+  }
+
 }
 
 export class SinapSuggestResponse<T = object> extends Array<T> {}
