@@ -34,16 +34,6 @@ export type TP3TypedMeta = {
 
 type IP3MetaTypedValue = IMetaTypedValue<IParsedObject, 'jsonRpcP3', TP3TypedMeta>
 
-const returnTypeMap = {
-  SinapSuggestResponse: 'SinapSuggest',
-  SinapContextResponse: 'SinapContext',
-}
-
-const paramTypeMap = {
-  SinapSuggestRequest: 'SinapSuggest',
-  SinapContextRequest: 'SinapContext',
-}
-
 export const P3Provider = (path: ControllerOptions | string): ClassDecorator => {
   return <TFunction extends Function> (target: TFunction) => {
     const extend: Extender = base => {
@@ -126,27 +116,8 @@ export const P3Provider = (path: ControllerOptions | string): ClassDecorator => 
           }
 
           const propKey = methodMeta.key + ''
-          const {meta: {param, method}} = meta
-          if (param && param !== method) {
-            throw new Error(`Cannot use ${param} parameter decorator with ${method} method decorator`)
-          }
-
-          const returnType = Reflect.getMetadata('design:returntype', instance, propKey)?.name
-
-          // @ts-ignore
-          if (returnType && returnTypeMap[returnType] !== method) {
-            throw new Error(`Cannot return ${returnType} in ${method}`)
-          }
-          const paramTypes = Reflect.getMetadata('design:paramtypes', instance, propKey)
-
-          // @ts-ignore
-          const sinapParam = paramTypes.filter((el: any) => paramTypeMap[el.name] !== undefined)
-          // @ts-ignore
-          if (sinapParam && sinapParam.length === 1 && paramTypeMap[sinapParam[0].name] !== method) {
-            throw new Error(`Class ${sinapParam[0].name} not compatible with ${method} method`)
-          }
-
           const handler = this.prototype[propKey]
+          const paramTypes = Reflect.getMetadata('design:paramtypes', instance, propKey)
           const params = (methodMeta.params || []).map((param: TRpcMethodParam, index: number) => {
             return this.resolveParam(boxedJsonRpc, paramTypes[index], param)
           })
