@@ -1,6 +1,6 @@
 import {IProto} from '@qiwi/decorator-utils/target/es5/interface'
 import {constructDecorator, METHOD, PARAM} from '@qiwi/decorator-utils'
-import {JsonRpcMethod} from 'nestjs-json-rpc'
+import {JSON_RPC_METADATA, JsonRpcMethod} from 'nestjs-json-rpc'
 import {JsonRpcData, ParamMetadataKeys} from 'expressjs-json-rpc'
 
 export type TSinapSuggest = {
@@ -62,6 +62,7 @@ const decoratorCompatibilityCheck = (
   proto: IProto,
   propName: string | undefined,
   method: string,
+  ctor: Function,
 ) => {
   const returnType = Reflect.getMetadata('design:returntype', proto, propName + '')?.name
   // @ts-ignore
@@ -70,25 +71,27 @@ const decoratorCompatibilityCheck = (
   }
 
   const sinapParam = Reflect.getMetadata('design:paramtypes', proto, propName + '')
-    // @ts-ignore
-    .filter((el: any) => paramTypeMap[el.name] !== undefined)
+  const meta = Reflect.getMetadata(JSON_RPC_METADATA, ctor)
+  // @ts-ignore
+  meta?.[propName]?.params.forEach(({index, type}) => {
+    if (type === 'params') {
+      // @ts-ignore
+      if (paramTypeMap[sinapParam[index].name] === undefined) {
+        throw new Error(`Cannot use ${sinapParam[index].name} class with this parameter decorator`)
+      }
 
-  if (
-    sinapParam &&
-    sinapParam.length === 1 &&
-    // @ts-ignore
-    paramTypeMap[sinapParam[0].name] !== method
-  ) {
-    throw new Error(
-      `Class ${sinapParam[0].name} not compatible with ${method} method`,
-    )
-  }
+      // @ts-ignore
+      if (paramTypeMap[sinapParam[index].name] !== method) {
+        throw new Error(`Class ${sinapParam[index].name} not compatible with ${method} method`)
+      }
+    }
+  })
 }
 
 export const SinapSuggest = (arg?: any) => {
-  return constructDecorator(({targetType, proto, propName, paramIndex}) => {
+  return constructDecorator(({targetType, proto, propName, paramIndex, ctor}) => {
     if (targetType === METHOD) {
-      decoratorCompatibilityCheck(proto, propName, 'SinapSuggest')
+      decoratorCompatibilityCheck(proto, propName, 'SinapSuggest', ctor)
       JsonRpcMethod(`suggest.${arg}`)(proto, propName!)
     }
 
@@ -100,9 +103,9 @@ export const SinapSuggest = (arg?: any) => {
 }
 
 export const SinapContext = (arg?: any) => {
-  return constructDecorator(({targetType, proto, propName, paramIndex}) => {
+  return constructDecorator(({targetType, proto, propName, paramIndex, ctor}) => {
     if (targetType === METHOD) {
-      decoratorCompatibilityCheck(proto, propName, 'SinapContext')
+      decoratorCompatibilityCheck(proto, propName, 'SinapContext', ctor)
       JsonRpcMethod(`context.${arg}`)(proto, propName!)
     }
 
