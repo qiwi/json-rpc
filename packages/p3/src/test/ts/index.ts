@@ -3,12 +3,12 @@ import {HttpStatus} from '@nestjs/common'
 import {NestApplication} from '@nestjs/core'
 import request from 'supertest'
 import {RpcId} from 'nestjs-json-rpc'
-// import {METHOD} from '@qiwi/decorator-utils'
+
 import {
   P3Provider,
   Auth,
   ClientAuth,
-  TSinapSuggest,
+  SinapSuggestRequest,
   SinapSuggest,
   SinapContext,
   Client,
@@ -17,6 +17,8 @@ import {
   TSecurity,
   ClientType,
   SecurityLevel,
+  SinapContextResponse,
+  SinapSuggestResponse,
 } from '../../main/ts'
 
 describe('P3', () => {
@@ -27,13 +29,14 @@ describe('P3', () => {
       @SinapSuggest('test2')
       bar(
         @RpcId() id: string,
-        @SinapSuggest() params: TSinapSuggest,
+        @SinapSuggest() params: SinapSuggestRequest,
         @Auth() auth: string,
         @ClientAuth() clientAuth: string,
         @Client() client: TClient,
         @Security() security: TSecurity,
-      ) {
-        return {
+      ): SinapSuggestResponse {
+        // @ts-ignore
+        return [{
           foo: 'bar',
           id,
           params,
@@ -41,7 +44,7 @@ describe('P3', () => {
           clientAuth,
           client,
           security,
-        }
+        }]
       }
 
     }
@@ -87,7 +90,7 @@ describe('P3', () => {
         .expect({
           jsonrpc: '2.0',
           id: '123',
-          result: {
+          result: [{
             foo: 'bar',
             id: '123',
             params: {fields: {a: '123', foo: 'bar'}, locale: 'baz', query: 'qwe'},
@@ -95,7 +98,7 @@ describe('P3', () => {
             clientAuth: 'Client-Authorization test3344',
             client: {clientId: 'SINAP-CLIENT', clientType: 'SINAP'},
             security: {level: 0},
-          },
+          }],
         })
     })
   })
@@ -106,12 +109,12 @@ describe('P3', () => {
 
         @Security(SecurityLevel.SECURE)
         @SinapContext('test2')
-        bar() {
+        bar(): SinapContextResponse {
           return {foo: 'bar'}
         }
 
         @SinapContext('test1')
-        baz() {
+        baz(): SinapContextResponse {
           return {foo: 'bar'}
         }
 
