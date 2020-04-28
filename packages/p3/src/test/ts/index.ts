@@ -35,7 +35,6 @@ describe('P3', () => {
         @Client() client: TClient,
         @Security() security: TSecurity,
       ): SinapSuggestResponse {
-        // @ts-ignore
         return [{
           foo: 'bar',
           id,
