@@ -2,28 +2,21 @@ import {SinapError} from '../../main/ts/sinap/error'
 
 describe('Error', () => {
   it('correct chain of inheritance', () => {
-    const error = new SinapError(0, 'foo', 'bar', 'baz')
+    const error = new SinapError(0, 'foo', 'bar')
     expect(error).toBeInstanceOf(SinapError)
     expect(error).toBeInstanceOf(Error)
   })
 
   it('correct work with 4 args', () => {
-    const error = new SinapError(SinapError.ACCESS, 'test', 'data', 'localmessage')
+    const error = new SinapError(-75, 'test', 'data', {foo: 'bar'})
     expect(error.code).toBe(-75)
     expect(error.message).toBe('test')
     expect(error.data).toBe('data')
-    expect(error.localizedMessages).toBe('localmessage')
-  })
-
-  it('correct work with 3 args', () => {
-    const error = new SinapError('test', 'code', 'message')
-    expect(error.code).toBe(0)
-    expect(error.message).toBe('test')
-    expect(error.data).toBe('code')
-    expect(error.localizedMessages).toBe('message')
+    expect(error.localizedMessages).toMatchObject({foo: 'bar'})
   })
 
   it('static fields', () => {
+    expect(SinapError.OK).toBe(0)
     expect(SinapError.OK).toBe(0)
     expect(SinapError.SUCCESS).toBe(0)
     expect(SinapError.TIMEOUT).toBe(-1)
