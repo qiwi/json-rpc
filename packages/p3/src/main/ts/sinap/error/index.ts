@@ -59,7 +59,7 @@ export const SinapError: SinapErrorConstructor = Object.assign(class extends Err
     data?: any,
     localizedMessages?: Record<string, any>) {
     super(message)
-    Object.setPrototypeOf(this, SinapError.prototype)
+    Object.setPrototypeOf(this, (this.constructor === Error ? SinapError : this.constructor).prototype)
 
     this.code = code || SinapError.DEFAULT_CODE
     this.data = data
