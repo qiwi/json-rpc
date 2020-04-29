@@ -32,38 +32,36 @@ type SinapErrorCodes = typeof SinapErrorCodes
 type SinapErrorCode = SinapErrorCodes[keyof SinapErrorCodes]
 
 type SinapError = {
-  code: SinapErrorCode
-  message: string
-  data: string | undefined
-  localizedMessages: Record<string, any> | string
+  code?: SinapErrorCode
+  message?: string
+  data?: string
+  localizedMessages?: Record<string, any> | string
 }
 
 type SinapErrorConstructor = SinapErrorCodes & {
   new (
-    code: SinapErrorCode,
-    message: string,
-    data: string,
+    code?: SinapErrorCode,
+    message?: string,
+    data?: any,
     localizedMessages?: Record<string, any>,
   ): SinapError
 }
 
 // tslint:disable-next-line
 export const SinapError: SinapErrorConstructor = Object.assign(class extends Error implements SinapError {
-  code: SinapErrorCode
-  message: string
-  data: string | undefined
-  localizedMessages: Record<string, any>
+  code?: SinapErrorCode
+  data?: string
+  localizedMessages?: Record<string, any>
 
   constructor(
-    code: SinapErrorCode,
-    message: string,
-    data: string,
+    code?: SinapErrorCode,
+    message?: string,
+    data?: any,
     localizedMessages?: Record<string, any>) {
-    super()
+    super(message)
     Object.setPrototypeOf(this, SinapError.prototype)
 
-    this.code = code
-    this.message = message.toString()
+    this.code = code || SinapError.DEFAULT_CODE
     this.data = data
     this.localizedMessages = localizedMessages || {}
   }

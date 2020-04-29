@@ -17,7 +17,6 @@ describe('Error', () => {
 
   it('static fields', () => {
     expect(SinapError.OK).toBe(0)
-    expect(SinapError.OK).toBe(0)
     expect(SinapError.SUCCESS).toBe(0)
     expect(SinapError.TIMEOUT).toBe(-1)
     expect(SinapError.PROBLEM).toBe(-3)
