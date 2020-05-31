@@ -1,3 +1,10 @@
+## @qiwi/json-rpc-common [1.1.1](https://github.com/qiwi/json-rpc/compare/@qiwi/json-rpc-common@1.1.0...@qiwi/json-rpc-common@1.1.1) (2020-05-31)
+
+
+### Performance Improvements
+
+* **package:** up deps ([6d623cf](https://github.com/qiwi/json-rpc/commit/6d623cf73724314557f045ad641573a6d155e2d8))
+
 # @qiwi/json-rpc-common [1.1.0](https://github.com/qiwi/json-rpc/compare/@qiwi/json-rpc-common@1.0.2...@qiwi/json-rpc-common@1.1.0) (2020-03-19)
 
 

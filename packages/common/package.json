@@ -1,6 +1,6 @@
 {
   "name": "@qiwi/json-rpc-common",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "JSON RPC 2.0 common components",
   "main": "target/es5/index.js",
   "source": "target/ts/index.ts",
@@ -87,5 +87,7 @@
   "bugs": {
     "url": "https://github.com/qiwi/json-rpc/issues"
   },
-  "homepage": "https://github.com/qiwi/json-rpc#readme"
+  "homepage": "https://github.com/qiwi/json-rpc#readme",
+  "peerDependencies": {},
+  "optionalDependencies": {}
 }
