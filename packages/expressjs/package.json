@@ -1,6 +1,6 @@
 {
   "name": "expressjs-json-rpc",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Express JSON RPC 2.0 Controller",
   "main": "target/es5/index.js",
   "source": "target/ts/index.ts",
@@ -39,7 +39,7 @@
   "dependencies": {
     "@qiwi/decorator-utils": "^3.0.3",
     "@qiwi/mware": "^1.10.0",
-    "@qiwi/json-rpc-common": "^1.1.0",
+    "@qiwi/json-rpc-common": "1.1.1",
     "@qiwi/substrate": "^1.18.31",
     "@types/express": "^4.17.6",
     "@types/lodash": "^4.14.154",
@@ -92,5 +92,7 @@
   "bugs": {
     "url": "https://github.com/qiwi/json-rpc/issues"
   },
-  "homepage": "https://github.com/qiwi/json-rpc#readme"
+  "homepage": "https://github.com/qiwi/json-rpc#readme",
+  "peerDependencies": {},
+  "optionalDependencies": {}
 }
