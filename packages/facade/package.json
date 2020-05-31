@@ -1,6 +1,6 @@
 {
   "name": "@qiwi/json-rpc",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "JSON RPC 2.0 facade",
   "main": "target/es5/index.js",
   "source": "target/ts/index.ts",
@@ -37,9 +37,9 @@
     "postupdate": "yarn && yarn build && yarn test"
   },
   "dependencies": {
-    "expressjs-json-rpc": "^1.4.0",
-    "nestjs-json-rpc": "^1.1.4",
-    "@qiwi/json-rpc-common": "^1.1.0",
+    "expressjs-json-rpc": "1.4.1",
+    "nestjs-json-rpc": "1.1.5",
+    "@qiwi/json-rpc-common": "1.1.1",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
@@ -85,5 +85,7 @@
   "bugs": {
     "url": "https://github.com/qiwi/json-rpc/issues"
   },
-  "homepage": "https://github.com/qiwi/json-rpc#readme"
+  "homepage": "https://github.com/qiwi/json-rpc#readme",
+  "peerDependencies": {},
+  "optionalDependencies": {}
 }
