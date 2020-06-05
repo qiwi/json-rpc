@@ -67,7 +67,7 @@
     "tslint-config-qiwi": "^1.4.0",
     "typedoc": "^0.17.7",
     "typedoc-plugin-external-module-name": "^4.0.0",
-    "typescript": "^3.9.3",
+    "typescript": "^3.9.5",
     "typescript-eslint-parser": "^22.0.0",
     "rimraf": "^3.0.2",
     "@swissquote/crafty-preset-jest": "^1.11.1"
