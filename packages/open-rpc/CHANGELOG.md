@@ -1,3 +1,10 @@
+## @qiwi/json-rpc-open-rpc [1.1.4](https://github.com/qiwi/json-rpc/compare/@qiwi/json-rpc-open-rpc@1.1.3...@qiwi/json-rpc-open-rpc@1.1.4) (2020-07-14)
+
+
+### Bug Fixes
+
+* **package:** up deps, fix vulnerable deps ([c47ec56](https://github.com/qiwi/json-rpc/commit/c47ec56135c4c4649311a8169dec339ba46da780))
+
 ## @qiwi/json-rpc-open-rpc [1.1.3](https://github.com/qiwi/json-rpc/compare/@qiwi/json-rpc-open-rpc@1.1.2...@qiwi/json-rpc-open-rpc@1.1.3) (2020-07-07)
 
 
