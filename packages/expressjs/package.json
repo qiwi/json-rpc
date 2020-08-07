@@ -43,7 +43,7 @@
     "@qiwi/substrate": "^1.18.35",
     "@types/express": "^4.17.7",
     "@types/lodash": "^4.14.157",
-    "class-transformer": "^0.2.3",
+    "class-transformer": "^0.3.1",
     "class-validator": "^0.12.2",
     "jsonrpc-lite": "^2.1.0",
     "lodash": "^4.17.19",
