@@ -42,7 +42,7 @@
     "lodash": "^4.17.19",
     "@qiwi/multi-semantic-release": "^3.1.0",
     "replace-in-file": "^6.1.0",
-    "semantic-release": "17.1.1",
+    "semantic-release": "17.2.3",
     "snazzy": "^8.0.0",
     "ts-jest": "^26.1.2",
     "typedoc": "^0.17.8",
