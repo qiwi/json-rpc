@@ -1,3 +1,21 @@
+## @qiwi/json-rpc [1.0.13](https://github.com/qiwi/json-rpc/compare/@qiwi/json-rpc@1.0.12...@qiwi/json-rpc@1.0.13) (2021-08-04)
+
+
+### Bug Fixes
+
+* **package:** update deps, fix vuls ([158a85e](https://github.com/qiwi/json-rpc/commit/158a85ed53d421211ce638d5c60f02b952db275e))
+
+
+
+
+
+### Dependencies
+
+* **expressjs-json-rpc:** upgraded to 1.4.5
+* **nestjs-json-rpc:** upgraded to 1.1.9
+* **@qiwi/json-rpc-common:** upgraded to 1.1.5
+* **@qiwi/json-rpc-infra:** upgraded to 1.0.0
+
 ## @qiwi/json-rpc [1.0.12](https://github.com/qiwi/json-rpc/compare/@qiwi/json-rpc@1.0.11...@qiwi/json-rpc@1.0.12) (2020-07-14)
 
 
