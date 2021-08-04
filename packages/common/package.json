@@ -1,6 +1,6 @@
 {
   "name": "@qiwi/json-rpc-common",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "JSON RPC 2.0 common components",
   "main": "target/es5/index.js",
   "source": "target/ts/index.ts",
@@ -43,7 +43,7 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@qiwi/json-rpc-infra": "*",
+    "@qiwi/json-rpc-infra": "1.0.0",
     "lodash": "^4.17.15"
   },
   "repository": {
