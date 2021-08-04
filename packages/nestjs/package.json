@@ -1,6 +1,6 @@
 {
   "name": "nestjs-json-rpc",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "Nestjs JSON RPC 2.0 Controller",
   "main": "target/es5/index.js",
   "source": "target/ts/index.ts",
@@ -40,8 +40,8 @@
     "@nestjs/common": "^8.0.5",
     "@nestjs/core": "^8.0.5",
     "@qiwi/substrate": "^1.20.9",
-    "@qiwi/json-rpc-common": "1.1.4",
-    "expressjs-json-rpc": "1.4.4",
+    "@qiwi/json-rpc-common": "1.1.5",
+    "expressjs-json-rpc": "1.4.5",
     "@types/express": "^4.17.13",
     "@types/lodash": "^4.14.172",
     "jsonrpc-lite": "^2.2.0",
@@ -50,7 +50,7 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@qiwi/json-rpc-infra": "*",
+    "@qiwi/json-rpc-infra": "1.0.0",
     "@nestjs/platform-express": "^8.0.5",
     "@nestjs/testing": "^8.0.5",
     "@types/bluebird": "^3.5.36",

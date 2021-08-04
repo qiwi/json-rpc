@@ -1,3 +1,20 @@
+## nestjs-json-rpc [1.1.9](https://github.com/qiwi/json-rpc/compare/nestjs-json-rpc@1.1.8...nestjs-json-rpc@1.1.9) (2021-08-04)
+
+
+### Bug Fixes
+
+* **package:** update deps, fix vuls ([158a85e](https://github.com/qiwi/json-rpc/commit/158a85ed53d421211ce638d5c60f02b952db275e))
+
+
+
+
+
+### Dependencies
+
+* **@qiwi/json-rpc-common:** upgraded to 1.1.5
+* **expressjs-json-rpc:** upgraded to 1.4.5
+* **@qiwi/json-rpc-infra:** upgraded to 1.0.0
+
 ## nestjs-json-rpc [1.1.8](https://github.com/qiwi/json-rpc/compare/nestjs-json-rpc@1.1.7...nestjs-json-rpc@1.1.8) (2020-07-14)
 
 
