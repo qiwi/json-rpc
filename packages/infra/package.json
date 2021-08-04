@@ -1,6 +1,6 @@
 {
   "name": "@qiwi/json-rpc-infra",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "QIWI json-rpc infra",
   "publishConfig": {
     "access": "public"
