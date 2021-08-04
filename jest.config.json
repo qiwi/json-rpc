@@ -1,34 +1,11 @@
 {
-  "preset": "ts-jest",
   "collectCoverage": true,
-  "coveragePathIgnorePatterns": [
-    "types.ts"
-  ],
-  "collectCoverageFrom": [
-    "<rootDir>/src/main/ts/**/*.ts"
-  ],
-  "testMatch": [
-    "<rootDir>/src/test/ts/**/*.ts",
-    "<rootDir>/src/test/js/**/*.js"
-  ],
-  "testPathIgnorePatterns": [
-    "/node_modules/",
-    "<rootDir>/src/test/stub"
-  ],
-  "moduleFileExtensions": [
-    "ts",
-    "tsx",
-    "js",
-    "jsx",
-    "json",
-    "node"
-  ],
-  "transform": {
-    "^.+\\.(ts|tsx)$": "ts-jest"
-  },
-  "globals": {
-    "ts-jest": {
-      "tsConfig": "tsconfig.test.json"
-    }
-  }
+  "projects": [
+    "<rootDir>/packages/nestjs/jest.config.json",
+    "<rootDir>/packages/expressjs/jest.config.json",
+    "<rootDir>/packages/facade/jest.config.json",
+    "<rootDir>/packages/common/jest.config.json",
+    "<rootDir>/packages/open-rpc/jest.config.json",
+    "<rootDir>/packages/p3/jest.config.json"
+  ]
 }

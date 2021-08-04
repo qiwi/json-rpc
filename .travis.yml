@@ -1,14 +1,11 @@
 dist: xenial
 language: node_js
 node_js:
-  - '12'
+  - '16'
 
 cache:
   directories:
     - node_modules
-
-before_install:
-  - npm install -g yarn
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
@@ -20,7 +17,7 @@ after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 install:
-  - sh scripts/sh/install.sh
+  - yarn
   - yarn run bootstrap
   - yarn run build
 
@@ -31,4 +28,4 @@ deploy:
   provider: script
   skip_cleanup: true
   script:
-    - yarn release
+    - npx -p @qiwi/semrel-toolkit multi-semrel
