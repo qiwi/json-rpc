@@ -121,7 +121,7 @@ describe('decorators', () => {
         .expect(HttpStatus.OK)
         .expect(({body}) => {
           const {result: {req}} = body
-          expect(req).toEqual(expect.arrayContaining(['url', 'route', 'baseUrl', 'body', 'headers', 'length', 'method']))
+          expect(req).toEqual(expect.arrayContaining(['url', 'route', 'baseUrl', 'body', 'length', 'method']))
         })
     })
     it('works correctly with @res', () => {
