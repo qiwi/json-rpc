@@ -42,7 +42,11 @@ describe('decorators', () => {
 
       @JsonRpcMethod('test3')
       baz(@Req() req: IRequest, @Res() res: IRequest, @Headers() headers: any) {
-        return {req: !!req, res: !!res, headers: !!headers}
+        return {
+          req: Object.keys(req).length,
+          res: Object.keys(res).length,
+          headers: Object.keys(headers).length,
+        }
       }
 
     }
@@ -119,9 +123,9 @@ describe('decorators', () => {
           jsonrpc: '2.0',
           id: '123',
           result: {
-            req: true,
-            res: true,
-            headers: true,
+            req: 33,
+            res: 30,
+            headers: 5,
           },
         })
     })

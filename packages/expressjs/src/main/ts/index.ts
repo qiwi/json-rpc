@@ -52,7 +52,7 @@ const AsyncMiddleware = constructDecorator(({targetType, target}) => {
   }
 })
 
-type IJsonRpcMetaTypedValue = IMetaTypedValue<IParsedObject, 'jsonRpc', {}> & {internalData: {req: IRequest, res: IResponse, next: INext}}
+type IJsonRpcMetaTypedValue = IMetaTypedValue<IParsedObject, 'jsonRpc', {}> & {reqresnext: {req: IRequest, res: IResponse, next: INext}}
 
 export function JsonRpcMiddleware(): ClassDecorator {
   return <TFunction extends Function>(target: TFunction) => {
@@ -97,7 +97,7 @@ export function JsonRpcMiddleware(): ClassDecorator {
           }
 
           return {
-            internalData: {req, res, next},
+            reqresnext: {req, res, next},
             meta: {},
             value: jsonRpc,
             type: 'jsonRpc',
@@ -182,10 +182,10 @@ export function JsonRpcMiddleware(): ClassDecorator {
 }
 
 export const exchangeCommonKeyMetadataForValue = (boxedJsonRpc: IJsonRpcMetaTypedValue, {type, value}: {type: any, value: any}) => {
-  const req = boxedJsonRpc.internalData.req
+  const req = boxedJsonRpc.reqresnext.req
   const metadataMap = {
-    [ParamMetadataKeys.RES]: boxedJsonRpc.internalData.res,
-    [ParamMetadataKeys.NEXT]: boxedJsonRpc.internalData.next,
+    [ParamMetadataKeys.RES]: boxedJsonRpc.reqresnext.res,
+    [ParamMetadataKeys.NEXT]: boxedJsonRpc.reqresnext.next,
     [ParamMetadataKeys.REQ]: req,
     [ParamMetadataKeys.BODY]: value ? req.body[value] : req.body,
     [ParamMetadataKeys.PARAM]: value ? req.params[value] : req.params,
