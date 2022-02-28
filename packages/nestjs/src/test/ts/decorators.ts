@@ -43,9 +43,9 @@ describe('decorators', () => {
       @JsonRpcMethod('test3')
       baz(@Req() req: IRequest, @Res() res: IRequest, @Headers() headers: any) {
         return {
-          req: Object.keys(req).length,
-          res: Object.keys(res).length,
-          headers: Object.keys(headers).length,
+          req: Object.keys(req),
+          res: Object.keys(res),
+          headers: Object.keys(headers),
         }
       }
 
@@ -109,7 +109,7 @@ describe('decorators', () => {
         })
     })
 
-    it('works correctly with @req, @res, @headers', () => {
+    it('works correctly with @req', () => {
       return request(app.getHttpServer())
         .post('/rpc')
         .send({
@@ -119,14 +119,39 @@ describe('decorators', () => {
           params: {},
         })
         .expect(HttpStatus.OK)
-        .expect({
+        .expect(({body}) => {
+          const {result: {req}} = body
+          expect(req).toEqual(expect.arrayContaining(['url', 'route', 'baseUrl', 'body', 'headers', 'length', 'method']))
+        })
+    })
+    it('works correctly with @res', () => {
+      return request(app.getHttpServer())
+        .post('/rpc')
+        .send({
           jsonrpc: '2.0',
+          method: 'test3',
           id: '123',
-          result: {
-            req: 33,
-            res: 30,
-            headers: 5,
-          },
+          params: {},
+        })
+        .expect(HttpStatus.OK)
+        .expect(({body}) => {
+          const {result: {res}} = body
+          expect(res).toEqual(expect.arrayContaining(['locals', 'statusCode', 'req']))
+        })
+    })
+    it('works correctly with @headers', () => {
+      return request(app.getHttpServer())
+        .post('/rpc')
+        .send({
+          jsonrpc: '2.0',
+          method: 'test3',
+          id: '123',
+          params: {},
+        })
+        .expect(HttpStatus.OK)
+        .expect(({body}) => {
+          const {result: {headers}} = body
+          expect(headers).toEqual(expect.arrayContaining(['host', 'accept-encoding', 'content-type', 'content-length', 'connection']))
         })
     })
   })
