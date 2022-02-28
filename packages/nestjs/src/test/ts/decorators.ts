@@ -8,9 +8,10 @@ import request from 'supertest'
 import {
   JsonRpcController,
   JsonRpcMethod,
-  RpcId,
+  RpcId, Req, Res, Headers,
   JsonRpcParams,
 } from '../../main/ts/'
+import {IRequest} from '@qiwi/substrate'
 
 describe('decorators', () => {
   describe('JsonRpcController', () => {
@@ -37,6 +38,11 @@ describe('decorators', () => {
       @JsonRpcMethod('test2')
       qux(@RpcId() id: string, @JsonRpcParams() {a, b}: Abc) {
         return {foo: 'quxr', id, a, b}
+      }
+
+      @JsonRpcMethod('test3')
+      baz(@Req() req: IRequest, @Res() res: IRequest, @Headers() headers: any) {
+        return {req: !!req, res: !!res, headers: !!headers}
       }
 
     }
@@ -96,6 +102,27 @@ describe('decorators', () => {
           jsonrpc: '2.0',
           id: '123',
           result: {foo: 'bar', id: '123'},
+        })
+    })
+
+    it('works correctly with @req, @res, @headers', () => {
+      return request(app.getHttpServer())
+        .post('/rpc')
+        .send({
+          jsonrpc: '2.0',
+          method: 'test3',
+          id: '123',
+          params: {},
+        })
+        .expect(HttpStatus.OK)
+        .expect({
+          jsonrpc: '2.0',
+          id: '123',
+          result: {
+            req: true,
+            res: true,
+            headers: true,
+          },
         })
     })
   })
