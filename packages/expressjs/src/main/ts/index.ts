@@ -17,7 +17,7 @@ import {
   JsonRpcError,
   OK,
 } from '@qiwi/json-rpc-common'
-import {IMetaTypedValue} from '@qiwi/substrate'
+import {IMetaTypedValue, INext, IRequest, IResponse} from '@qiwi/substrate'
 import {constructDecorator, METHOD} from '@qiwi/decorator-utils'
 
 export * from '@qiwi/json-rpc-common'
@@ -28,6 +28,18 @@ export enum ParamMetadataKeys {
   PARAMS = 'params',
   CLIENT = 'client',
   SECURITY = 'security',
+  REQ = 'req',
+  RES = 'res',
+  NEXT = 'next',
+  BODY = 'body',
+  QUERY = 'query',
+  PARAM = 'param',
+  HEADERS = 'headers',
+  SESSION = 'session',
+  FILE = 'file',
+  FILES = 'files',
+  HOST = 'host',
+  IP = 'ip',
 }
 
 const asyncMiddleware = (fn: Function) => function(this: any, req: Request, res: Response, next: NextFunction) {
@@ -40,7 +52,7 @@ const AsyncMiddleware = constructDecorator(({targetType, target}) => {
   }
 })
 
-type IJsonRpcMetaTypedValue = IMetaTypedValue<IParsedObject, 'jsonRpc', {}>
+type IJsonRpcMetaTypedValue = IMetaTypedValue<IParsedObject, 'jsonRpc', {}> & {reqresnext: {req: IRequest, res: IResponse, next: INext}}
 
 export function JsonRpcMiddleware(): ClassDecorator {
   return <TFunction extends Function>(target: TFunction) => {
@@ -49,8 +61,8 @@ export function JsonRpcMiddleware(): ClassDecorator {
       class Extended extends base {
 
         @AsyncMiddleware
-        protected async middleware(req: Request, res: Response): Promise<any> {
-          const boxedJsonRpc = (this.constructor as any).parseRequest(req)
+        protected async middleware(req: Request, res: Response, next: NextFunction): Promise<any> {
+          const boxedJsonRpc = (this.constructor as any).parseRequest(req, res, next)
           if (!boxedJsonRpc) {
             // TODO
             return
@@ -76,7 +88,7 @@ export function JsonRpcMiddleware(): ClassDecorator {
 
         }
 
-        static parseRequest(req: Request): IJsonRpcMetaTypedValue | undefined {
+        static parseRequest(req: Request, res: Response, next: NextFunction): IJsonRpcMetaTypedValue | undefined {
           const jsonRpc = parseJsonRpcObject(req.body)
 
           if (Array.isArray(jsonRpc)) {
@@ -85,6 +97,7 @@ export function JsonRpcMiddleware(): ClassDecorator {
           }
 
           return {
+            reqresnext: {req, res, next},
             meta: {},
             value: jsonRpc,
             type: 'jsonRpc',
@@ -136,7 +149,11 @@ export function JsonRpcMiddleware(): ClassDecorator {
         }
 
         static resolveParam(boxedJsonRpc: IJsonRpcMetaTypedValue, Param: any, {type, value}: TRpcMethodParam) {
-          let data
+          let data = exchangeCommonKeyMetadataForValue(boxedJsonRpc, {type, value})
+
+          if (data) {
+            return data
+          }
 
           if (boxedJsonRpc.value.type !== 'request') {
             return
@@ -164,6 +181,22 @@ export function JsonRpcMiddleware(): ClassDecorator {
   }
 }
 
+export const exchangeCommonKeyMetadataForValue = (boxedJsonRpc: IJsonRpcMetaTypedValue, {type, value}: {type: any, value: any}) => {
+  const req = boxedJsonRpc.reqresnext.req
+  const metadataMap = {
+    [ParamMetadataKeys.RES]: boxedJsonRpc.reqresnext.res,
+    [ParamMetadataKeys.NEXT]: boxedJsonRpc.reqresnext.next,
+    [ParamMetadataKeys.REQ]: req,
+    [ParamMetadataKeys.BODY]: value ? req.body[value] : req.body,
+    [ParamMetadataKeys.PARAM]: value ? req.params[value] : req.params,
+    [ParamMetadataKeys.QUERY]: value ? req.query[value] : req.value,
+    [ParamMetadataKeys.HEADERS]: value ? req.headers[value.toLowerCase()] : req.headers,
+    [ParamMetadataKeys.IP]: req.ip,
+  }
+  // @ts-ignore
+  return metadataMap[type]
+}
+
 export const JsonRpcData = (type: ParamMetadataKeys = ParamMetadataKeys.REQUEST, value?: any) =>
   (target: Object, propertyKey: string, index: number) => {
     const meta: TRpcMeta = Reflect.getOwnMetadata(JSON_RPC_METADATA, target.constructor) || {}
@@ -188,6 +221,15 @@ export const RpcId = () => JsonRpcData(ParamMetadataKeys.ID)
 export const JsonRpcId = RpcId
 
 export const JsonRpcParams = (value?: string) => JsonRpcData(ParamMetadataKeys.PARAMS, value)
+
+export const Res = () => JsonRpcData(ParamMetadataKeys.RES)
+export const Req = () => JsonRpcData(ParamMetadataKeys.REQ)
+export const Next = () => JsonRpcData(ParamMetadataKeys.NEXT)
+export const Body = (value?: string) => JsonRpcData(ParamMetadataKeys.BODY, value)
+export const Param = (value?: string) => JsonRpcData(ParamMetadataKeys.PARAM, value)
+export const Query = (value?: string) => JsonRpcData(ParamMetadataKeys.QUERY, value)
+export const Headers = (value?: string) => JsonRpcData(ParamMetadataKeys.HEADERS, value)
+export const Ip = () => JsonRpcData(ParamMetadataKeys.IP)
 
 export const JsonRpcMethod = (method: string) => {
   return (target: any, propertyKey: string) => {

@@ -8,9 +8,10 @@ import request from 'supertest'
 import {
   JsonRpcController,
   JsonRpcMethod,
-  RpcId,
+  RpcId, Req, Res, Headers,
   JsonRpcParams,
 } from '../../main/ts/'
+import {IRequest} from '@qiwi/substrate'
 
 describe('decorators', () => {
   describe('JsonRpcController', () => {
@@ -37,6 +38,15 @@ describe('decorators', () => {
       @JsonRpcMethod('test2')
       qux(@RpcId() id: string, @JsonRpcParams() {a, b}: Abc) {
         return {foo: 'quxr', id, a, b}
+      }
+
+      @JsonRpcMethod('test3')
+      baz(@Req() req: IRequest, @Res() res: IRequest, @Headers() headers: any) {
+        return {
+          req: Object.keys(req),
+          res: Object.keys(res),
+          headers: Object.keys(headers),
+        }
       }
 
     }
@@ -96,6 +106,52 @@ describe('decorators', () => {
           jsonrpc: '2.0',
           id: '123',
           result: {foo: 'bar', id: '123'},
+        })
+    })
+
+    it('works correctly with @req', () => {
+      return request(app.getHttpServer())
+        .post('/rpc')
+        .send({
+          jsonrpc: '2.0',
+          method: 'test3',
+          id: '123',
+          params: {},
+        })
+        .expect(HttpStatus.OK)
+        .expect(({body}) => {
+          const {result: {req}} = body
+          expect(req).toEqual(expect.arrayContaining(['url', 'route', 'baseUrl', 'body', 'length', 'method']))
+        })
+    })
+    it('works correctly with @res', () => {
+      return request(app.getHttpServer())
+        .post('/rpc')
+        .send({
+          jsonrpc: '2.0',
+          method: 'test3',
+          id: '123',
+          params: {},
+        })
+        .expect(HttpStatus.OK)
+        .expect(({body}) => {
+          const {result: {res}} = body
+          expect(res).toEqual(expect.arrayContaining(['locals', 'statusCode', 'req']))
+        })
+    })
+    it('works correctly with @headers', () => {
+      return request(app.getHttpServer())
+        .post('/rpc')
+        .send({
+          jsonrpc: '2.0',
+          method: 'test3',
+          id: '123',
+          params: {},
+        })
+        .expect(HttpStatus.OK)
+        .expect(({body}) => {
+          const {result: {headers}} = body
+          expect(headers).toEqual(expect.arrayContaining(['host', 'accept-encoding', 'content-type', 'content-length', 'connection']))
         })
     })
   })
