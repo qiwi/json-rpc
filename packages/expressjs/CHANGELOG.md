@@ -1,3 +1,10 @@
+# expressjs-json-rpc [1.5.0](https://github.com/qiwi/json-rpc/compare/expressjs-json-rpc@1.4.5...expressjs-json-rpc@1.5.0) (2022-03-01)
+
+
+### Features
+
+* add Req, Res, and a few more decorators ([b7da378](https://github.com/qiwi/json-rpc/commit/b7da378312178bf438d419c0ea5b146b44dc0462))
+
 ## expressjs-json-rpc [1.4.5](https://github.com/qiwi/json-rpc/compare/expressjs-json-rpc@1.4.4...expressjs-json-rpc@1.4.5) (2021-08-04)
 
 
