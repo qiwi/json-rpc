@@ -1,3 +1,18 @@
+# nestjs-json-rpc [1.2.0](https://github.com/qiwi/json-rpc/compare/nestjs-json-rpc@1.1.9...nestjs-json-rpc@1.2.0) (2022-03-01)
+
+
+### Features
+
+* add Req, Res, and a few more decorators ([b7da378](https://github.com/qiwi/json-rpc/commit/b7da378312178bf438d419c0ea5b146b44dc0462))
+
+
+
+
+
+### Dependencies
+
+* **expressjs-json-rpc:** upgraded to 1.5.0
+
 ## nestjs-json-rpc [1.1.9](https://github.com/qiwi/json-rpc/compare/nestjs-json-rpc@1.1.8...nestjs-json-rpc@1.1.9) (2021-08-04)
 
 
