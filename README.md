@@ -70,3 +70,6 @@ app.use('/rpc', jsonRpcMware)
 
 ## Specification
 [https://www.jsonrpc.org/specification](https://www.jsonrpc.org/specification)
+
+## License
+[MIT](./LICENSE)
