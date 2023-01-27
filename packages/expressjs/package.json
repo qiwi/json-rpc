@@ -41,7 +41,7 @@
     "@types/express": "^4.17.13",
     "@types/lodash": "^4.14.172",
     "class-transformer": "^0.4.0",
-    "class-validator": "^0.13.1",
+    "class-validator": "^0.14.0",
     "jsonrpc-lite": "^2.2.0",
     "lodash": "^4.17.21",
     "reflect-metadata": "^0.1.13",
