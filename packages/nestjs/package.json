@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@nestjs/common": "^8.0.5",
-    "@nestjs/core": "^8.0.5",
+    "@nestjs/core": "^9.0.5",
     "@qiwi/substrate": "^1.20.9",
     "@qiwi/json-rpc-common": "1.1.5",
     "expressjs-json-rpc": "1.5.0",
